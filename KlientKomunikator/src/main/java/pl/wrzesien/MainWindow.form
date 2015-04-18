@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="pl.wrzesien.MainWindow">
+  <grid id="27dc6" binding="MainWindow" layout-manager="GridLayoutManager" row-count="5" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="2" left="10" bottom="2" right="10"/>
+    <constraints>
+      <xy x="20" y="20" width="500" height="400"/>
+    </constraints>
+    <properties>
+      <preferredSize width="408" height="293"/>
+    </properties>
+    <border type="line"/>
+    <children>
+      <hspacer id="8b78f">
+        <constraints>
+          <grid row="0" column="1" row-span="1" col-span="2" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+      </hspacer>
+      <vspacer id="f2672">
+        <constraints>
+          <grid row="1" column="0" row-span="4" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+        </constraints>
+      </vspacer>
+      <component id="5097c" class="javax.swing.JButton" binding="rejestracjaButton" default-binding="true">
+        <constraints>
+          <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <font size="14"/>
+          <text value="Rejestracja"/>
+        </properties>
+      </component>
+      <component id="146c5" class="javax.swing.JButton" binding="logowanieButton" default-binding="true">
+        <constraints>
+          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <font size="14"/>
+          <text value="Logowanie"/>
+        </properties>
+      </component>
+      <component id="ad288" class="javax.swing.JComboBox" binding="cmbAdresSerwera">
+        <constraints>
+          <grid row="2" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <editable value="true"/>
+          <font size="14"/>
+          <model>
+            <item value="127.0.0.1"/>
+          </model>
+        </properties>
+      </component>
+    </children>
+  </grid>
+</form>

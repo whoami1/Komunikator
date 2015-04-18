@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="pl.wrzesien.KontaktyWindow">
+  <grid id="27dc6" binding="KontaktyWindow" layout-manager="GridLayoutManager" row-count="6" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="2" left="10" bottom="2" right="10"/>
+    <constraints>
+      <xy x="23" y="2" width="601" height="450"/>
+    </constraints>
+    <properties>
+      <minimumSize width="484" height="447"/>
+    </properties>
+    <border type="line" title="Kontakty"/>
+    <children>
+      <scrollpane id="15486">
+        <constraints>
+          <grid row="1" column="0" row-span="5" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="298dc" class="javax.swing.JTable" binding="Użytkownicy" custom-create="true">
+            <constraints/>
+            <properties/>
+          </component>
+        </children>
+      </scrollpane>
+      <component id="97e5b" class="javax.swing.JButton" binding="dodajKontaktButton" default-binding="true">
+        <constraints>
+          <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="2" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Dodaj kontakt"/>
+        </properties>
+      </component>
+      <component id="cd02a" class="javax.swing.JButton" binding="historiaButton">
+        <constraints>
+          <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Historia rozmowy"/>
+        </properties>
+      </component>
+      <component id="e7a62" class="javax.swing.JButton" binding="oAplikacjiButton" default-binding="true">
+        <constraints>
+          <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="2" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="O aplikacji"/>
+          <verticalAlignment value="3"/>
+        </properties>
+      </component>
+      <component id="85e7f" class="javax.swing.JLabel" binding="lblUruchomionyUzytkownik">
+        <constraints>
+          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value=""/>
+        </properties>
+      </component>
+      <component id="b5b5b" class="javax.swing.JButton" binding="testWiadDoSerwButton" default-binding="true">
+        <constraints>
+          <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Test wiad do serw"/>
+        </properties>
+      </component>
+      <component id="e2872" class="pl.wrzesien.Zegar" binding="zegar1" default-binding="true">
+        <constraints>
+          <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="1" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <verticalAlignment value="1"/>
+          <verticalTextPosition value="0"/>
+        </properties>
+      </component>
+    </children>
+  </grid>
+</form>
