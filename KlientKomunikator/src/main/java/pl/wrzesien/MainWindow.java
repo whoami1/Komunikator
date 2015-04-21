@@ -22,8 +22,7 @@ public class MainWindow extends JFrame {
         //final MainWindow mainWindow = this;
         Client client = new Client();
 
-        if(client.connect(getServerIpAddress()))
-        {
+        if (client.connect(getServerIpAddress())) {
             logowanieButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     openLogowanieWindow(client);
@@ -39,9 +38,7 @@ public class MainWindow extends JFrame {
                     topFrame.dispose();
                 }
             });
-        }
-        else
-        {
+        } else {
             JOptionPane.showMessageDialog(MainWindow, "Połączenie nie mogło zostać zreazlizowane...", "Błąd połączenia", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -56,14 +53,12 @@ public class MainWindow extends JFrame {
         this.cmbAdresSerwera = cmbAdresSerwera;
     }
 
-    public void openLogowanieWindow(Client client)
-    {
+    public void openLogowanieWindow(Client client) {
         LogowanieWindow logowanieWindow = new LogowanieWindow(client);
         logowanieWindow.showWindow();
     }
 
-    public void openRejestracjaWindow(Client client)
-    {
+    public void openRejestracjaWindow(Client client) {
         RejestracjaWindow rejestracjaWindow = new RejestracjaWindow(client);
         rejestracjaWindow.showWindow();
     }

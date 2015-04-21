@@ -8,8 +8,7 @@ import java.text.DateFormat;
 import java.util.Date;
 
 // nowa klasa Zegar zbudowana w oparciu o klasę JLabel
-public class Zegar extends JLabel implements Runnable
-{
+public class Zegar extends JLabel implements Runnable {
     // wątek
     private Thread watek;
     private boolean looped;
@@ -17,12 +16,11 @@ public class Zegar extends JLabel implements Runnable
     private int pauza = 1000;
 
     // konstruktor klasy
-    public Zegar()
-    {
+    public Zegar() {
         // wyrównamy napisy do środka
         super("", SwingConstants.CENTER);
         // wybieramy font do wyświetlenia zagara (podajemy nazwę, styl oraz rozmiar)
-        setFont (new Font ("Consolas", Font.BOLD, 24));
+        setFont(new Font("Consolas", Font.BOLD, 24));
         // ustalamy kolor tekstu
         setForeground(Color.BLACK);
         // ustawiamy przeźroczystość
@@ -31,11 +29,9 @@ public class Zegar extends JLabel implements Runnable
     }
 
     // metoda start tworzy i uruchamia wątek zegara
-    public void start()
-    {
+    public void start() {
         // jeśli nie ma działającego wątka, utwórz i uruchom nowy
-        if (watek == null)
-        {
+        if (watek == null) {
             looped = true;
             watek = new Thread(this);
             watek.start();
@@ -43,39 +39,32 @@ public class Zegar extends JLabel implements Runnable
     }
 
     // metoda wywołana po starcie wątku
-    public void run()
-    {
+    public void run() {
 //        if (watek == Thread.currentThread())
 //        {
 //            return;
 //        }
 
         // dopóki zmienna watek wskazuje na bieżący wątek
-        while (looped)
-        {
+        while (looped) {
             // nowy obiekt klasy Date
             Date time = new Date();
             // formatowanie
             DateFormat df = DateFormat.getTimeInstance(DateFormat.MEDIUM);
             // ustawiamy tekst
             setText(df.format(time));
-            try
-            {
+            try {
                 // wstrzymujemy działanie wątku na 1 sekundę
                 watek.sleep(pauza);
-            }
-            catch (InterruptedException e)
-            {
+            } catch (InterruptedException e) {
                 break;
             }
         }
     }
 
     // metoda zatrzymująca zegar (wątek)
-    public void stop()
-    {
-        if (watek == null)
-        {
+    public void stop() {
+        if (watek == null) {
             return;
         }
 

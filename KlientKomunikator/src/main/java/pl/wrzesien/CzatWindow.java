@@ -15,8 +15,7 @@ public class CzatWindow {
         initComponents();
     }
 
-    private void initComponents()
-    {
+    private void initComponents() {
 
     }
 

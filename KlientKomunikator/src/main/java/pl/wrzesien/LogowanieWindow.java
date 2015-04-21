@@ -65,7 +65,8 @@ public class LogowanieWindow extends JFrame {
 
 
     public String getLogin() {
-        String login = txtLogin.getText().toString();
+        String login = String.valueOf(txtLogin.getText());
+        ;
         System.out.println("Login: " + login);
         return login;
     }

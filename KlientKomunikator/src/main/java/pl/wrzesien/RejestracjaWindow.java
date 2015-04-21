@@ -17,7 +17,7 @@ public class RejestracjaWindow extends JFrame {
     private Client client;
 
     public RejestracjaWindow(Client client) {
-       this.client=client;
+        this.client = client;
 
         anulujButton.addActionListener(new ActionListener() {
             @Override
@@ -47,11 +47,11 @@ public class RejestracjaWindow extends JFrame {
     }
 
     private void registerIn() {
-            if (client.register(getLogin(), getHaslo())) {
-                JOptionPane.showMessageDialog(RejestracjaWindow, "Podany użytkownik już istnieje...", "Błąd rejestracji", JOptionPane.ERROR_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(RejestracjaWindow, "Rejestracja zakończyła się sukcesem...", "Rejestracja", JOptionPane.INFORMATION_MESSAGE);
-            }
+        if (client.register(getLogin(), getHaslo())) {
+            JOptionPane.showMessageDialog(RejestracjaWindow, "Podany użytkownik już istnieje...", "Błąd rejestracji", JOptionPane.ERROR_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(RejestracjaWindow, "Rejestracja zakończyła się sukcesem...", "Rejestracja", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
     public String getLogin() {

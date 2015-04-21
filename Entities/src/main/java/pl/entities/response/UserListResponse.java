@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by Micha³ Wrzesieñ on 2015-04-14.
  */
-public class UserListResponse  implements Serializable {
+public class UserListResponse implements Serializable {
     private List<User> userList;
 
     public UserListResponse(List<User> userList) {

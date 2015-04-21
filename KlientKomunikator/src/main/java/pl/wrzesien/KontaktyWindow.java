@@ -20,15 +20,13 @@ public class KontaktyWindow {
     private String nazwaUzytkownika;
     private Client client;
 
-    public KontaktyWindow(Client client, String nazwaUzytkownika)
-    {
+    public KontaktyWindow(Client client, String nazwaUzytkownika) {
         this.nazwaUzytkownika = nazwaUzytkownika;
         this.client = client;
         initComponents();
     }
 
-    private void initComponents()
-    {
+    private void initComponents() {
         lblUruchomionyUzytkownik.setText("Konto użytkownika: " + nazwaUzytkownika);
         oAplikacjiButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -44,18 +42,14 @@ public class KontaktyWindow {
 
         testWiadDoSerwButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e)
-            {
+            public void actionPerformed(ActionEvent e) {
                 String text = "Testujemy czy dziala";
-                client.wyslanieTestowejWiadomosciNaSerwer(nazwaUzytkownika,text);
+                client.wyslanieTestowejWiadomosciNaSerwer(nazwaUzytkownika, text);
 
-                if (client.wyslanieTestowejWiadomosciNaSerwer(nazwaUzytkownika,text))
-                {
-                    System.out.println(client.odebranieTestowejWiadomosciNaSerwer(nazwaUzytkownika,text));
+                if (client.wyslanieTestowejWiadomosciNaSerwer(nazwaUzytkownika, text)) {
+                    System.out.println(client.odebranieTestowejWiadomosciNaSerwer(nazwaUzytkownika, text));
                     JOptionPane.showMessageDialog(KontaktyWindow, "Udalo sie przeslac wiadomosc", "Informacja", JOptionPane.INFORMATION_MESSAGE);
-                }
-                else
-                {
+                } else {
                     JOptionPane.showMessageDialog(KontaktyWindow, "Nie udalo sie przeslac wiadomosc", "Błąd", JOptionPane.ERROR_MESSAGE);
                 }
             }
@@ -74,7 +68,7 @@ public class KontaktyWindow {
 
     public void showKontaktyWindow() {
         JFrame frame = new JFrame("Komunikator - Kontakty");
-        JPanel kontaktyWindow = new KontaktyWindow(client,nazwaUzytkownika).KontaktyWindow;
+        JPanel kontaktyWindow = new KontaktyWindow(client, nazwaUzytkownika).KontaktyWindow;
         frame.setContentPane(kontaktyWindow);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();

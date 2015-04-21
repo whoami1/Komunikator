@@ -60,26 +60,24 @@ public class UserService {
     }
 
     //checkCredentials dziala przy logowaniu
-    public Boolean checkCredentials(String login, String password)
-    {
+    public Boolean checkCredentials(String login, String password) {
         session.beginTransaction();
 
         List<Query> result = session.createQuery("FROM User WHERE userNick='" + login + "' AND userPassword='" + password + "'").list();
         session.getTransaction().commit();
-        if(result.size() == 1)
+        if (result.size() == 1)
             return true;
         else
             return false;
     }
 
     //chceckIfLoginExists dziala przy rejestracji
-    public Boolean checkIfLoginExists(String login)
-    {
+    public Boolean checkIfLoginExists(String login) {
         session.beginTransaction();
 
         List<Query> result = session.createQuery("FROM User WHERE userNick='" + login + "'").list();
         session.getTransaction().commit();
-        if(result.size() == 1) //jeśli znajdzie to true, to znaczy, że taki użytkownik już istnieje
+        if (result.size() == 1) //jeśli znajdzie to true, to znaczy, że taki użytkownik już istnieje
             return true;
         else
             return false;

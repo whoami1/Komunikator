@@ -62,7 +62,7 @@ public class SocketThread implements Runnable {
                     } else {
                         oos.writeObject(new LoginResponse(success));
                         LOGGER.info(log("Nieprawidlowy login lub haslo - rozlaczam z " + socket.getRemoteSocketAddress()));
-                        break;
+                        //break;
                     }
                 } else if (obj instanceof RegisterRequest) {
                     RegisterRequest registerRequest = (RegisterRequest) obj;
@@ -72,19 +72,20 @@ public class SocketThread implements Runnable {
                     if (succes) {
                         oos.writeObject(new RegistrationResponse(succes));
                         LOGGER.info(log("Uzytkownik o podanym loginie: " + registerRequest.getLogin() + " juz istnieje - rozlaczam z " + socket.getRemoteSocketAddress()));
-                        break;
+                        //break;
                     } else {
                         oos.writeObject(new RegistrationResponse(succes));
                         us.newUser(registerRequest.getLogin(), registerRequest.getPassword());
                         LOGGER.info(log("Zarejestrowano uzytkownika o loginie: " + registerRequest.getLogin() + " - rozlaczam z " + socket.getRemoteSocketAddress()));
-                        break;
+                        //break;
                     }
                 } else if (obj instanceof TestowaWiadomoscRequest) {
-                    TestowaWiadomoscRequest testowaWiadomoscRequest = (TestowaWiadomoscRequest) obj;
-                    System.out.println(testowaWiadomoscRequest.toString());
-                    boolean succes = true;
-                    String innyUzytkownik = "innyuzytkownik";
+                    String innyUzytkownik = "admin";
                     String text = "Odpowiedz od serwera";
+                    System.out.println(onlineUsersToSocketMap.toString());
+                    TestowaWiadomoscRequest testowaWiadomoscRequest = (TestowaWiadomoscRequest) obj;
+                    System.out.println("TUTAJ" + testowaWiadomoscRequest.toString());
+                    boolean succes = true;
                     Object odpowiedz = new TestowaWiadomoscResponse(succes, innyUzytkownik, text);
                     oos.writeObject(odpowiedz);
                     System.out.println(odpowiedz);

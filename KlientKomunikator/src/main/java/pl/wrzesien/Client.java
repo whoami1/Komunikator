@@ -91,9 +91,8 @@ public class Client {
         return "Błąd";
     }
 
-    public String log(String text)
-    {
-        return "|" + "Port: "+ client.getPort() + "|" + text;
+    public String log(String text) {
+        return "|" + "Port: " + client.getPort() + "|" + text;
     }
 
     public boolean connect(String serverIp) {
