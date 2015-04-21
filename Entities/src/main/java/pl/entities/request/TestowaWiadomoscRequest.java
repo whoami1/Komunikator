@@ -7,6 +7,7 @@ import java.io.Serializable;
  */
 public class TestowaWiadomoscRequest implements Serializable {
     private static final long serialVersionUID = 1;
+
     private String username;
     private String text;
 

@@ -7,6 +7,7 @@ import java.io.Serializable;
  */
 public class RegistrationResponse implements Serializable {
     private static final long serialVersionUID = 1;
+
     private boolean succes;
 
     public RegistrationResponse(boolean succes) {

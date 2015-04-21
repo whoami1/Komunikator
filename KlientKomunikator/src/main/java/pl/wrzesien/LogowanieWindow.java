@@ -15,7 +15,7 @@ public class LogowanieWindow extends JFrame {
     private static final Logger LOGGER = LoggerFactory.getLogger(pl.wrzesien.LogowanieWindow.class);
     private JPasswordField txtHaslo;
     private JTextField txtLogin;
-    private JPanel LogowanieWindow;
+    private JPanel logowanieWindow;
     private JButton anulujButton;
     private JButton zalogujButton;
     private Client client;
@@ -23,11 +23,10 @@ public class LogowanieWindow extends JFrame {
     public LogowanieWindow(Client client) {
         this.client = client;
 
-        //final pl.wrzesien.LogowanieWindow logowanieWindow = this;
         anulujButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(LogowanieWindow);
+                JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(logowanieWindow);
                 topFrame.dispose();
                 MainWindow.getFrames()[0].setVisible(true);
             }
@@ -43,9 +42,9 @@ public class LogowanieWindow extends JFrame {
 
     private void checkIfAllCredentialsEntered() {
         if (getLogin().isEmpty()) {
-            JOptionPane.showMessageDialog(LogowanieWindow, "Nie wpisano jeszcze loginu...", "Informacja", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(logowanieWindow, "Nie wpisano jeszcze loginu...", "Informacja", JOptionPane.INFORMATION_MESSAGE);
         } else if (getHaslo().isEmpty()) {
-            JOptionPane.showMessageDialog(LogowanieWindow, "Nie wpisano jeszcze hasła...", "Informacja", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(logowanieWindow, "Nie wpisano jeszcze hasła...", "Informacja", JOptionPane.INFORMATION_MESSAGE);
         } else {
             logIn();
         }
@@ -57,16 +56,15 @@ public class LogowanieWindow extends JFrame {
             LOGGER.info(users.toString());
             KontaktyWindow kontaktyWindow = new KontaktyWindow(client, getLogin());
             kontaktyWindow.showKontaktyWindow();
-            ((JFrame) SwingUtilities.getWindowAncestor(LogowanieWindow)).setVisible(false);
+            ((JFrame) SwingUtilities.getWindowAncestor(logowanieWindow)).setVisible(false);
         } else {
-            JOptionPane.showMessageDialog(LogowanieWindow, "Nieprawidłowy login albo hasło...", "Błąd uwierzytelniania", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(logowanieWindow, "Nieprawidłowy login albo hasło...", "Błąd uwierzytelniania", JOptionPane.ERROR_MESSAGE);
         }
     }
 
 
     public String getLogin() {
         String login = String.valueOf(txtLogin.getText());
-        ;
         System.out.println("Login: " + login);
         return login;
     }
@@ -77,8 +75,9 @@ public class LogowanieWindow extends JFrame {
         return haslo;
     }
 
+
     public void showWindow() {
-        setContentPane(LogowanieWindow);
+        setContentPane(logowanieWindow);
         setTitle("Komunikator - Logowanie");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();

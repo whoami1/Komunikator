@@ -7,6 +7,7 @@ import java.io.Serializable;
  */
 public class TestowaWiadomoscResponse implements Serializable {
     private static final long serialVersionUID = 1;
+
     private boolean succes;
     private String username;
     private String text;
@@ -17,7 +18,6 @@ public class TestowaWiadomoscResponse implements Serializable {
         this.username = username;
         this.text = text;
     }
-
 
     public String getUsername() {
         return username;

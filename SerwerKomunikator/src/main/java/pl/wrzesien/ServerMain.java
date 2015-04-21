@@ -58,7 +58,7 @@ public class ServerMain extends Thread {
                 Socket server = serverSocket.accept();//nowy watek + przeslanie do niego tego socketa + kontynuacja petli
                 new Thread(new SocketThread(userSocketMap, server)).start();
             } catch (SocketTimeoutException s) {
-                LOGGER.info(log("Limit czasu socketu zosta³ przekroczony!"));
+                LOGGER.info(log("Limit czasu socketu zostal przekroczony!"));
                 break;
             } catch (IOException e) {
                 e.printStackTrace();

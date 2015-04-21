@@ -1,8 +1,6 @@
 package pl.wrzesien;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -14,8 +12,8 @@ import java.awt.event.MouseEvent;
 public class KontaktyWindow {
     private JButton historiaButton;
     private JButton dodajKontaktButton;
-    private JTable Użytkownicy;
-    private JPanel KontaktyWindow;
+    private JTable uzytkownicy;
+    private JPanel kontaktyWindow;
     private JButton oAplikacjiButton;
     private JLabel lblUruchomionyUzytkownik;
     private JButton testWiadDoSerwButton;
@@ -71,19 +69,24 @@ public class KontaktyWindow {
                 {"admin", "niedostępny"},
                 {"user", "niedostępny"}
         };
-        Użytkownicy = new JTable(data, columnNames);
-        Użytkownicy.setRowSelectionAllowed(true);
-       // Użytkownicy.setFocusable(false);
-        Użytkownicy.setFillsViewportHeight(true);
-        Użytkownicy.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        Użytkownicy.addMouseListener(new MouseAdapter() {
+        uzytkownicy = new JTable(data, columnNames) {
+            public boolean isCellEditable (int data, int columnNames)
+            {
+                return false;
+            } //zablokowanie edycji tabeli
+        };
+
+        uzytkownicy.setRowSelectionAllowed(true);
+       // uzytkownicy.setFocusable(false);
+        uzytkownicy.setFillsViewportHeight(true);
+        uzytkownicy.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        uzytkownicy.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if(e.getClickCount() == 1)
-                {
-                    String user = (String) Użytkownicy.getValueAt(Użytkownicy.getSelectedRow(), 0);
+                if (e.getClickCount() == 2) {
+                    String user = (String) uzytkownicy.getValueAt(uzytkownicy.getSelectedRow(), 0);
                     System.out.println("***************" + user);
-                    CzatWindow czatWindow = new CzatWindow(new User(user), client);
+                    CzatWindow czatWindow = new CzatWindow(new User(user), client, nazwaUzytkownika);
                     czatWindow.showWindow();
                 }
             }
@@ -93,7 +96,7 @@ public class KontaktyWindow {
 
     public void showKontaktyWindow() {
         JFrame frame = new JFrame("Komunikator - Kontakty");
-        JPanel kontaktyWindow = new KontaktyWindow(client, nazwaUzytkownika).KontaktyWindow;
+        JPanel kontaktyWindow = new KontaktyWindow(client, nazwaUzytkownika).kontaktyWindow;
         frame.setContentPane(kontaktyWindow);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();

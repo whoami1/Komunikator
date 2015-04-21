@@ -9,8 +9,15 @@ import java.io.Serializable;
  */
 public class MessageResponse implements Serializable {
     private static final long serialVersionUID = 1;
+
     private User user;
     private String message;
+
+    public MessageResponse(User user, String message) {
+
+        this.user = user;
+        this.message = message;
+    }
 
     public User getUser() {
         return user;
@@ -18,12 +25,6 @@ public class MessageResponse implements Serializable {
 
     public String getMessage() {
         return message;
-    }
-
-    public MessageResponse(User user, String message) {
-
-        this.user = user;
-        this.message = message;
     }
 
     @Override

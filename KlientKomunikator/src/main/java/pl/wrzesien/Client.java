@@ -26,6 +26,10 @@ public class Client {
     public Client() {
     }
 
+    public String log(String text) {
+        return "|" + "Port: " + client.getPort() + "|" + text;
+    }
+
     private Object read() {
         Object obj;
         try {
@@ -40,6 +44,11 @@ public class Client {
         return null;
     }
 
+    public List<User> readUserSet() {
+        UserListResponse userListResponse = (UserListResponse) read();
+        return userListResponse.getUserList();
+    }
+
     public boolean login(String userLogin, String userPassword) {
         try {
             out.writeObject(new LoginRequest(userLogin, userPassword));
@@ -49,11 +58,6 @@ public class Client {
             e.printStackTrace();
         }
         return false;
-    }
-
-    public List<User> readUserSet() {
-        UserListResponse userListResponse = (UserListResponse) read();
-        return userListResponse.getUserList();
     }
 
     public boolean register(String userLogin, String userPassword) {
@@ -83,10 +87,6 @@ public class Client {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public String log(String text) {
-        return "|" + "Port: " + client.getPort() + "|" + text;
     }
 
     public boolean connect(String serverIp) {

@@ -22,7 +22,6 @@ public class UserService {
     } //prawdopodobnie można zmienić na HibernateUtil.shutdown();
 
     public void newUser(String userNick, String userPassword) {
-        //this.session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
 
         User user = new User(userNick, userPassword);

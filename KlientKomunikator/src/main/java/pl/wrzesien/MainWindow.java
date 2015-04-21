@@ -11,7 +11,7 @@ public class MainWindow extends JFrame {
     private JComboBox cmbAdresSerwera;
     private JButton logowanieButton;
     private JButton rejestracjaButton;
-    private JPanel MainWindow;
+    private JPanel mainWindow;
 
     public MainWindow() {
         initComponents();
@@ -19,14 +19,13 @@ public class MainWindow extends JFrame {
 
     private void initComponents() {
 
-        //final MainWindow mainWindow = this;
         Client client = new Client();
 
         if (client.connect(getServerIpAddress())) {
             logowanieButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     openLogowanieWindow(client);
-                    JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(MainWindow);
+                    JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(mainWindow);
                     topFrame.dispose();
                 }
             });
@@ -34,12 +33,12 @@ public class MainWindow extends JFrame {
             rejestracjaButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     openRejestracjaWindow(client);
-                    JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(MainWindow);
+                    JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(mainWindow);
                     topFrame.dispose();
                 }
             });
         } else {
-            JOptionPane.showMessageDialog(MainWindow, "Połączenie nie mogło zostać zreazlizowane...", "Błąd połączenia", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(mainWindow, "Połączenie nie mogło zostać zreazlizowane...", "Błąd połączenia", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -66,7 +65,7 @@ public class MainWindow extends JFrame {
     public static void main(String[] args) {
         JFrame frame = new JFrame("Komunikator");
         pl.wrzesien.MainWindow mainwindow = new MainWindow();
-        frame.setContentPane(mainwindow.MainWindow);
+        frame.setContentPane(mainwindow.mainWindow);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);

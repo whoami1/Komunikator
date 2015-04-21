@@ -62,7 +62,6 @@ public class SocketThread implements Runnable {
                     } else {
                         oos.writeObject(new LoginResponse(success));
                         LOGGER.info(log("Nieprawidlowy login lub haslo - rozlaczam z " + socket.getRemoteSocketAddress()));
-                        //break;
                     }
                 } else if (obj instanceof RegisterRequest) {
                     RegisterRequest registerRequest = (RegisterRequest) obj;
@@ -72,18 +71,15 @@ public class SocketThread implements Runnable {
                     if (succes) {
                         oos.writeObject(new RegistrationResponse(succes));
                         LOGGER.info(log("Uzytkownik o podanym loginie: " + registerRequest.getLogin() + " juz istnieje - rozlaczam z " + socket.getRemoteSocketAddress()));
-                        //break;
                     } else {
                         oos.writeObject(new RegistrationResponse(succes));
                         us.newUser(registerRequest.getLogin(), registerRequest.getPassword());
                         LOGGER.info(log("Zarejestrowano uzytkownika o loginie: " + registerRequest.getLogin() + " - rozlaczam z " + socket.getRemoteSocketAddress()));
-                        //break;
                     }
                 } else if (obj instanceof TestowaWiadomoscRequest) {
                     String text = "Odpowiedz od serwera";
                     LOGGER.info(onlineUsersToSocketMap.toString());
                     TestowaWiadomoscRequest testowaWiadomoscRequest = (TestowaWiadomoscRequest) obj;
-
                     onlineUsersToSocketMap.get(new User(testowaWiadomoscRequest.getUsername())).getListOfMessageResponse().add(new MessageResponse(user, testowaWiadomoscRequest.getText()));
                 } else if (obj instanceof AllMesageRequest) {
                     Communication communication = onlineUsersToSocketMap.get(user);

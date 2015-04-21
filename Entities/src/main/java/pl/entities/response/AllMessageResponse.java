@@ -8,15 +8,16 @@ import java.util.List;
  */
 public class AllMessageResponse implements Serializable {
     private static final long serialVersionUID = 1;
-    private List<MessageResponse> messageResponseList;
 
-    public List<MessageResponse> getMessageResponseList() {
-        return messageResponseList;
-    }
+    private List<MessageResponse> messageResponseList;
 
     public AllMessageResponse(List<MessageResponse> messageResponseList) {
 
         this.messageResponseList = messageResponseList;
+    }
+
+    public List<MessageResponse> getMessageResponseList() {
+        return messageResponseList;
     }
 
     @Override

@@ -12,7 +12,7 @@ public class RejestracjaWindow extends JFrame {
     private JPasswordField txtHaslo;
     private JButton zarejestrujButton;
     private JButton anulujButton;
-    private JPanel RejestracjaWindow;
+    private JPanel rejestracjaWindow;
 
     private Client client;
 
@@ -22,7 +22,7 @@ public class RejestracjaWindow extends JFrame {
         anulujButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(RejestracjaWindow);
+                JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(rejestracjaWindow);
                 topFrame.dispose();
                 MainWindow.getFrames()[0].setVisible(true);
             }
@@ -38,9 +38,9 @@ public class RejestracjaWindow extends JFrame {
 
     private void checkIfAllCredentialsEntered() {
         if (getLogin().isEmpty()) {
-            JOptionPane.showMessageDialog(RejestracjaWindow, "Nie wpisano jeszcze loginu...", "Informacja", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(rejestracjaWindow, "Nie wpisano jeszcze loginu...", "Informacja", JOptionPane.INFORMATION_MESSAGE);
         } else if (getHaslo().isEmpty()) {
-            JOptionPane.showMessageDialog(RejestracjaWindow, "Nie wpisano jeszcze hasła...", "Informacja", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(rejestracjaWindow, "Nie wpisano jeszcze hasła...", "Informacja", JOptionPane.INFORMATION_MESSAGE);
         } else {
             registerIn();
         }
@@ -48,9 +48,9 @@ public class RejestracjaWindow extends JFrame {
 
     private void registerIn() {
         if (client.register(getLogin(), getHaslo())) {
-            JOptionPane.showMessageDialog(RejestracjaWindow, "Podany użytkownik już istnieje...", "Błąd rejestracji", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(rejestracjaWindow, "Podany użytkownik już istnieje...", "Błąd rejestracji", JOptionPane.ERROR_MESSAGE);
         } else {
-            JOptionPane.showMessageDialog(RejestracjaWindow, "Rejestracja zakończyła się sukcesem...", "Rejestracja", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(rejestracjaWindow, "Rejestracja zakończyła się sukcesem...", "Rejestracja", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -67,7 +67,7 @@ public class RejestracjaWindow extends JFrame {
     }
 
     public void showWindow() {
-        setContentPane(RejestracjaWindow);
+        setContentPane(rejestracjaWindow);
         setTitle("Komunikator - Rejestracja");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();

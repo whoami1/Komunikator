@@ -40,10 +40,6 @@ public class Zegar extends JLabel implements Runnable {
 
     // metoda wywołana po starcie wątku
     public void run() {
-//        if (watek == Thread.currentThread())
-//        {
-//            return;
-//        }
 
         // dopóki zmienna watek wskazuje na bieżący wątek
         while (looped) {
