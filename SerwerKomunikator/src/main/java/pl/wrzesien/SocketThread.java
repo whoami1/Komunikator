@@ -2,28 +2,27 @@ package pl.wrzesien;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pl.entities.request.AllMesageRequest;
 import pl.entities.request.LoginRequest;
 import pl.entities.request.RegisterRequest;
 import pl.entities.request.TestowaWiadomoscRequest;
-import pl.entities.response.LoginResponse;
-import pl.entities.response.RegistrationResponse;
-import pl.entities.response.TestowaWiadomoscResponse;
-import pl.entities.response.UserListResponse;
+import pl.entities.response.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class SocketThread implements Runnable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SocketThread.class);
-    private Map<User, Socket> onlineUsersToSocketMap;
+    private Map<User, Communication> onlineUsersToSocketMap;
     private Socket socket;
 
-    public SocketThread(Map<User, Socket> onlineUsersToSocketMap, Socket socket) {
+    public SocketThread(Map<User, Communication> onlineUsersToSocketMap, Socket socket) {
         this.onlineUsersToSocketMap = onlineUsersToSocketMap;
         this.socket = socket;
     }
@@ -53,7 +52,8 @@ public class SocketThread implements Runnable {
                     boolean success = us.checkCredentials(loginRequest.getLogin(), loginRequest.getPassword());
                     if (success) {
                         user = new User(loginRequest.getLogin());
-                        onlineUsersToSocketMap.put(user, socket);
+                        Communication communication = new Communication(socket, new ArrayList<>());
+                        onlineUsersToSocketMap.put(user, communication);
                         oos.writeObject(new LoginResponse(success));
                         ArrayList<User> userList = new ArrayList<>();
                         userList.addAll(onlineUsersToSocketMap.keySet());
@@ -80,15 +80,16 @@ public class SocketThread implements Runnable {
                         //break;
                     }
                 } else if (obj instanceof TestowaWiadomoscRequest) {
-                    String innyUzytkownik = "admin";
                     String text = "Odpowiedz od serwera";
-                    System.out.println(onlineUsersToSocketMap.toString());
+                    LOGGER.info(onlineUsersToSocketMap.toString());
                     TestowaWiadomoscRequest testowaWiadomoscRequest = (TestowaWiadomoscRequest) obj;
-                    System.out.println("TUTAJ" + testowaWiadomoscRequest.toString());
-                    boolean succes = true;
-                    Object odpowiedz = new TestowaWiadomoscResponse(succes, innyUzytkownik, text);
-                    oos.writeObject(odpowiedz);
-                    System.out.println(odpowiedz);
+
+                    onlineUsersToSocketMap.get(new User(testowaWiadomoscRequest.getUsername())).getListOfMessageResponse().add(new MessageResponse(user, testowaWiadomoscRequest.getText()));
+                } else if (obj instanceof AllMesageRequest) {
+                    Communication communication = onlineUsersToSocketMap.get(user);
+                    List<MessageResponse> listOfMessageResponse = communication.getListOfMessageResponse();
+                    oos.writeObject(new AllMessageResponse(listOfMessageResponse));
+                    onlineUsersToSocketMap.put(user, new Communication(communication.getSocket(), new ArrayList<>()));
                 }
             }
         } catch (Exception e) {

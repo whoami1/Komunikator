@@ -15,7 +15,7 @@ public class ServerMain extends Thread {
     private static final Logger LOGGER = LoggerFactory.getLogger(ServerMain.class);
     private ServerSocket serverSocket;
 
-    private Map<User, Socket> userSocketMap = new HashMap<>();
+    private Map<User, Communication> userSocketMap = new HashMap<>();
 
     /*private ArrayList<User> userList = new ArrayList<>();
 
