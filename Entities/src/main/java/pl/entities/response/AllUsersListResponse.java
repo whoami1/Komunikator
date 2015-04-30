@@ -1,6 +1,6 @@
 package pl.entities.response;
 
-import pl.wrzesien.User;
+import pl.wrzesien.UserInfo;
 
 import java.io.Serializable;
 import java.util.List;
@@ -11,13 +11,13 @@ import java.util.List;
 public class AllUsersListResponse implements Serializable {
     private static final long serialVersionUID = 1;
 
-    private List<User> allUsersList;
+    private List<UserInfo> allUsersList;
 
-    public AllUsersListResponse(List<User> allUsersList) {
+    public AllUsersListResponse(List<UserInfo> allUsersList) {
         this.allUsersList = allUsersList;
     }
 
-    public List<User> getAllUsersList() {
+    public List<UserInfo> getAllUsersList() {
         return allUsersList;
     }
 

@@ -9,17 +9,17 @@ import java.util.List;
  * Created by Micha³ Wrzesieñ on 2015-04-21.
  */
 public class Communication {
-    private Socket socket;
     private List<MessageResponse> listOfMessageResponse;
 
+    private UserInfo userInfo;
 
-    public Communication(Socket socket, List<MessageResponse> listOfMessageResponse) {
-        this.socket = socket;
+    public Communication(List<MessageResponse> listOfMessageResponse, UserInfo userInfo) {
         this.listOfMessageResponse = listOfMessageResponse;
+        this.userInfo = userInfo;
     }
 
-    public Socket getSocket() {
-        return socket;
+    public UserInfo getUserInfo() {
+        return userInfo;
     }
 
     public List<MessageResponse> getListOfMessageResponse() {

@@ -1,6 +1,6 @@
 package pl.entities.response;
 
-import pl.wrzesien.User;
+import pl.wrzesien.UserInfo;
 
 import java.io.Serializable;
 
@@ -10,17 +10,17 @@ import java.io.Serializable;
 public class MessageResponse implements Serializable {
     private static final long serialVersionUID = 1;
 
-    private User user;
+    private UserInfo userInfo;
     private String message;
 
-    public MessageResponse(User user, String message) {
+    public MessageResponse(UserInfo userInfo, String message) {
 
-        this.user = user;
+        this.userInfo = userInfo;
         this.message = message;
     }
 
-    public User getUser() {
-        return user;
+    public UserInfo getUserInfo() {
+        return userInfo;
     }
 
     public String getMessage() {
@@ -30,7 +30,7 @@ public class MessageResponse implements Serializable {
     @Override
     public String toString() {
         return "MessageResponse{" +
-                "user=" + user +
+                "userInfo=" + userInfo +
                 ", message='" + message + '\'' +
                 '}';
     }

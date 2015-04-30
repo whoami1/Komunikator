@@ -19,12 +19,14 @@ import java.util.Map;
 public class SocketThread implements Runnable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SocketThread.class);
-    private Map<User, Communication> onlineUsersToSocketMap;
+    private Map<String, Communication> allUsersToCommunicationMap;
     private Socket socket;
+    private UserService userService;
 
-    public SocketThread(Map<User, Communication> onlineUsersToSocketMap, Socket socket) {
-        this.onlineUsersToSocketMap = onlineUsersToSocketMap;
+    public SocketThread(Map<String, Communication> allUsersToCommunicationMap, Socket socket, UserService userService) {
+        this.allUsersToCommunicationMap = allUsersToCommunicationMap;
         this.socket = socket;
+        this.userService = userService;
     }
 
     public String log(String text) {
@@ -37,7 +39,7 @@ public class SocketThread implements Runnable {
         ObjectOutputStream oos = null;
         User user = null;
         try {
-            UserService us = new UserService();
+
             LOGGER.info(log("Polaczono z" + socket.getRemoteSocketAddress()));
 
             ois = new ObjectInputStream(socket.getInputStream());
@@ -49,21 +51,19 @@ public class SocketThread implements Runnable {
                 if (obj instanceof LoginRequest) {
                     LoginRequest loginRequest = (LoginRequest) obj;
                     LOGGER.info(log(loginRequest.toString()));
-                    boolean success = us.checkCredentials(loginRequest.getLogin(), loginRequest.getPassword());
+                    boolean success = userService.checkCredentials(loginRequest.getLogin(), loginRequest.getPassword());
                     if (success) {
-                        user = new User(loginRequest.getLogin());
-                        Communication communication = new Communication(socket, new ArrayList<>());
-                        onlineUsersToSocketMap.put(user, communication);
+                        Communication communication = allUsersToCommunicationMap.get(loginRequest.getLogin());
+                        UserInfo userStatus = communication.getUserInfo();
+
+                        //setter który zmieni status
+                        userStatus.setUserStatus(true);
+
                         oos.writeObject(new LoginResponse(success));
 
-                        ArrayList<User> userList = new ArrayList<>();
-                        userList.addAll(onlineUsersToSocketMap.keySet());
-                        oos.writeObject(new UserListResponse(userList));
-
-                        //TUTAJ
-/*                        ArrayList<User> allUsersList = new ArrayList<>();
-                        allUsersList.addAll(us.showAllUsers());
-                        oos.writeObject(new AllUsersListResponse(allUsersList));*/
+                        ArrayList<UserInfo> allUsersList = new ArrayList<>();
+                        allUsersList.addAll(userService.showAllUsers());
+                        oos.writeObject(new AllUsersListResponse(allUsersList));
 
                         LOGGER.info(log("Zalogowano uzytkownika: " + loginRequest.getLogin()));
                     } else {
@@ -73,25 +73,25 @@ public class SocketThread implements Runnable {
                 } else if (obj instanceof RegisterRequest) {
                     RegisterRequest registerRequest = (RegisterRequest) obj;
                     System.out.println(registerRequest.toString());
-                    boolean succes = us.checkIfLoginExists(registerRequest.getLogin());
+                    boolean succes = userService.checkIfLoginExists(registerRequest.getLogin());
 
                     if (succes) {
                         oos.writeObject(new RegistrationResponse(succes));
                         LOGGER.info(log("Uzytkownik o podanym loginie: " + registerRequest.getLogin() + " juz istnieje - rozlaczam z " + socket.getRemoteSocketAddress()));
                     } else {
                         oos.writeObject(new RegistrationResponse(succes));
-                        us.newUser(registerRequest.getLogin(), registerRequest.getPassword());
+                        userService.newUser(registerRequest.getLogin(), registerRequest.getPassword());
                         LOGGER.info(log("Zarejestrowano uzytkownika o loginie: " + registerRequest.getLogin() + " - rozlaczam z " + socket.getRemoteSocketAddress()));
                     }
                 } else if (obj instanceof MessageRequest) {
-                    LOGGER.info(onlineUsersToSocketMap.toString());
+                    LOGGER.info(allUsersToCommunicationMap.toString());
                     MessageRequest messageRequest = (MessageRequest) obj;
-                    onlineUsersToSocketMap.get(new User(messageRequest.getUsername())).getListOfMessageResponse().add(new MessageResponse(user, messageRequest.getText()));
+                    allUsersToCommunicationMap.get(new UserInfo(messageRequest.getUsername())).getListOfMessageResponse().add(new MessageResponse(user, messageRequest.getText()));
                 } else if (obj instanceof AllMesageRequest) {
-                    Communication communication = onlineUsersToSocketMap.get(user);
+                    Communication communication = allUsersToCommunicationMap.get(user);
                     List<MessageResponse> listOfMessageResponse = communication.getListOfMessageResponse();
                     oos.writeObject(new AllMessageResponse(listOfMessageResponse));
-                    onlineUsersToSocketMap.put(user, new Communication(communication.getSocket(), new ArrayList<>()));
+                    allUsersToCommunicationMap.put(user, new Communication(communication.getSocket(), new ArrayList<>(), user));
                 }
             }
         } catch (Exception e) {
@@ -117,7 +117,7 @@ public class SocketThread implements Runnable {
                 e.printStackTrace();
             }
             if (user != null) {
-                onlineUsersToSocketMap.remove(user);
+                allUsersToCommunicationMap.remove(user);
                 LOGGER.info("Uzytkownik: " + user.getUserNick() + " rozlaczyl sie");
             }
         }

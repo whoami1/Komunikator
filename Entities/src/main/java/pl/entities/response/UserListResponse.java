@@ -1,6 +1,6 @@
 package pl.entities.response;
 
-import pl.wrzesien.User;
+import pl.wrzesien.UserInfo;
 
 import java.io.Serializable;
 import java.util.List;
@@ -11,20 +11,20 @@ import java.util.List;
 public class UserListResponse implements Serializable {
     private static final long serialVersionUID = 1;
 
-    private List<User> userList;
+    private List<UserInfo> userInfoList;
 
-    public UserListResponse(List<User> userList) {
-        this.userList = userList;
+    public UserListResponse(List<UserInfo> userInfoList) {
+        this.userInfoList = userInfoList;
     }
 
-    public List<User> getUserList() {
-        return userList;
+    public List<UserInfo> getUserInfoList() {
+        return userInfoList;
     }
 
     @Override
     public String toString() {
         return "pl.entities.response.UserListResponse{" +
-                "userList=" + userList +
+                "userInfoList=" + userInfoList +
                 '}';
     }
 }

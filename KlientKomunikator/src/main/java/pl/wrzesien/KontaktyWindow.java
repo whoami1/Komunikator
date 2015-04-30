@@ -4,13 +4,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
-import java.util.Vector;
 
 /**
  * Created by Michał Wrzesień on 2015-03-22.
@@ -63,8 +61,8 @@ public class KontaktyWindow {
     private void createUIComponents() {
         // TODO: place custom component creation code here
 
-        //List<User> allUsers = client.listaWszystkichUzytkownikow();
-        //LOGGER.info("Zarejestrowani uzytkownicy: " + allUsers.toString());
+        List<UserInfo> allUserInfos = client.listaWszystkichUzytkownikow();
+        LOGGER.info("Zarejestrowani uzytkownicy: " + allUserInfos.toString());
 
         String columnNames[] = new String[] {"Nick", "Status"};
 
@@ -91,7 +89,7 @@ public class KontaktyWindow {
 */
 
 
-/*        for(User user : users)
+/*        for(UserInfo user : users)
         {
             data.add(user);
             data.add("dostępny");
@@ -122,7 +120,7 @@ public class KontaktyWindow {
                 if (e.getClickCount() == 2) {
                     String user = (String) uzytkownicy.getValueAt(uzytkownicy.getSelectedRow(), 0);
                     System.out.println("***************" + user);
-                    CzatWindow czatWindow = new CzatWindow(new User(user), client, nazwaUzytkownika);
+                    CzatWindow czatWindow = new CzatWindow(new UserInfo(user), client, nazwaUzytkownika);
                     czatWindow.showWindow();
                 }
             }

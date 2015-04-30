@@ -13,24 +13,24 @@ public class CzatWindow {
     private JTextField txtWiadomosc;
     private JButton wyslijButton;
     private JLabel lblUruchomionyUzytkownik;
-    private User user;
+    private UserInfo userInfo;
     private Client client;
     private String nazwaUzytkownika;
 
-    public CzatWindow(User user, Client client, String nazwaUzytkownika) {
-        this.user = user;
+    public CzatWindow(UserInfo userInfo, Client client, String nazwaUzytkownika) {
+        this.userInfo = userInfo;
         this.client = client;
         this.nazwaUzytkownika = nazwaUzytkownika;
 
         txtCzat.setEditable(false);
-        lblUruchomionyUzytkownik.setText("Użytkownik: " + "\"" + nazwaUzytkownika + "\"" + " rozmowa z: " + "\"" + user.getUserNick() + "\"");
+        lblUruchomionyUzytkownik.setText("Użytkownik: " + "\"" + nazwaUzytkownika + "\"" + " rozmowa z: " + "\"" + userInfo.getUserNick() + "\"");
         
         wyslijButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //txtCzat.append(user.getUserNick()+ ": " + txtWiadomosc.getText() + "\n");
+                //txtCzat.append(userInfo.getUserNick()+ ": " + txtWiadomosc.getText() + "\n");
                 txtCzat.append(nazwaUzytkownika + ": " + txtWiadomosc.getText() + "\n");
-                client.wyslanieWiadomosciNaSerwer(user.getUserNick(), txtWiadomosc.getText());
+                client.wyslanieWiadomosciNaSerwer(userInfo.getUserNick(), txtWiadomosc.getText());
                 txtWiadomosc.setText(null);
             }
         });

@@ -44,15 +44,15 @@ public class Client {
         return null;
     }
 
-    public List<User> readUserSet() {
+    public List<UserInfo> readUserSet() {
         UserListResponse userListResponse = (UserListResponse) read();
-        return userListResponse.getUserList();
+        return userListResponse.getUserInfoList();
     }
 
-/*    public List<User> listaWszystkichUzytkownikow() {
+    public List<UserInfo> listaWszystkichUzytkownikow() {
         AllUsersListResponse allUsersListResponse = (AllUsersListResponse) read();
         return allUsersListResponse.getAllUsersList();
-    }*/
+    }
 
     public boolean login(String userLogin, String userPassword) {
         try {
