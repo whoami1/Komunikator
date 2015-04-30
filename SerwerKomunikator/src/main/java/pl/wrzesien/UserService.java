@@ -49,10 +49,11 @@ public class UserService {
         session.getTransaction().commit();
     }
 
-    public List<User> showUsers() {
+    public List<User> showAllUsers() {
         session.beginTransaction();
 
-        List<User> result = session.createQuery("FROM User").list();
+        // poprawić, żeby tylko pobierany był userNick
+        List<User> result = session.createQuery("SELECT userNick FROM User").list();
 
         session.getTransaction().commit();
         return result;

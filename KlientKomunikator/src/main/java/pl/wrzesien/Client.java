@@ -4,8 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.entities.request.AllMesageRequest;
 import pl.entities.request.LoginRequest;
+import pl.entities.request.MessageRequest;
 import pl.entities.request.RegisterRequest;
-import pl.entities.request.TestowaWiadomoscRequest;
 import pl.entities.response.*;
 
 import java.io.*;
@@ -49,6 +49,11 @@ public class Client {
         return userListResponse.getUserList();
     }
 
+/*    public List<User> listaWszystkichUzytkownikow() {
+        AllUsersListResponse allUsersListResponse = (AllUsersListResponse) read();
+        return allUsersListResponse.getAllUsersList();
+    }*/
+
     public boolean login(String userLogin, String userPassword) {
         try {
             out.writeObject(new LoginRequest(userLogin, userPassword));
@@ -71,19 +76,20 @@ public class Client {
         return true; //w wypadku zerwania połączenia zawsze rejestracja nie powiedzie się
     }
 
-    public void wyslanieTestowejWiadomosciNaSerwer(String userLogin, String text) {
+    public void wyslanieWiadomosciNaSerwer(String userLogin, String text) {
         try {
-            out.writeObject(new TestowaWiadomoscRequest(userLogin, text));
+            out.writeObject(new MessageRequest(userLogin, text));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void odebranieTestowejWiadomosciNaSerwer() {
+    public void odebranieWiadomosciZSerwera() {
         try {
             out.writeObject(new AllMesageRequest());
             AllMessageResponse allMessageResponse = (AllMessageResponse) read();
             LOGGER.info(allMessageResponse.toString());
+            allMessageResponse.getMessageResponseList().toString();
         } catch (IOException e) {
             e.printStackTrace();
         }

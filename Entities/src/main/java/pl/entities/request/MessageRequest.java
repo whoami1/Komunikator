@@ -5,13 +5,13 @@ import java.io.Serializable;
 /**
  * Created by Micha³ Wrzesieñ on 2015-04-16.
  */
-public class TestowaWiadomoscRequest implements Serializable {
+public class MessageRequest implements Serializable {
     private static final long serialVersionUID = 1;
 
     private String username;
     private String text;
 
-    public TestowaWiadomoscRequest(String username, String text) {
+    public MessageRequest(String username, String text) {
         this.username = username;
         this.text = text;
     }
@@ -26,7 +26,7 @@ public class TestowaWiadomoscRequest implements Serializable {
 
     @Override
     public String toString() {
-        return "pl.entities.request.TestowaWiadomoscRequest{" +
+        return "pl.entities.request.MessageRequest{" +
                 "username='" + username + '\'' +
                 ", text='" + text + '\'' +
                 '}';

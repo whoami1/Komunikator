@@ -6,7 +6,7 @@ package pl.wrzesien;
 public class MainAdmin {
     public static void main(String[] args) {
         Client client = new Client();
-        client.connect("192.168.0.103");
+        client.connect("127.0.0.1");
         client.login("admin", "pass");
         KontaktyWindow admin = new KontaktyWindow(client, "admin");
         admin.showKontaktyWindow();

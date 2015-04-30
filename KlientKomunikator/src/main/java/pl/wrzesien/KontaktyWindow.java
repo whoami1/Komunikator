@@ -1,15 +1,22 @@
 package pl.wrzesien;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
+import java.util.Vector;
 
 /**
  * Created by Michał Wrzesień on 2015-03-22.
  */
 public class KontaktyWindow {
+    private static final Logger LOGGER = LoggerFactory.getLogger(pl.wrzesien.KontaktyWindow.class);
     private JButton historiaButton;
     private JButton dodajKontaktButton;
     private JTable uzytkownicy;
@@ -19,6 +26,7 @@ public class KontaktyWindow {
     private JButton testWiadDoSerwButton;
     private Zegar zegar1;
     private JButton odbierzButton;
+    private JScrollPane jScrollPaneUsersTable;
 
     private String nazwaUzytkownika;
     private Client client;
@@ -27,6 +35,7 @@ public class KontaktyWindow {
         this.nazwaUzytkownika = nazwaUzytkownika;
         this.client = client;
         initComponents();
+
     }
 
     private void initComponents() {
@@ -43,41 +52,68 @@ public class KontaktyWindow {
             }
         });
 
-        testWiadDoSerwButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                String text = "Testujemy czy dziala";
-                client.wyslanieTestowejWiadomosciNaSerwer("admin", text);
-
-            }
-        });
-
         odbierzButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                client.odebranieTestowejWiadomosciNaSerwer();
+                client.odebranieWiadomosciZSerwera();
             }
         });
-
     }
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
-        String[] columnNames = {"Nick", "Status"};
+
+        //List<User> allUsers = client.listaWszystkichUzytkownikow();
+        //LOGGER.info("Zarejestrowani uzytkownicy: " + allUsers.toString());
+
+        String columnNames[] = new String[] {"Nick", "Status"};
+
+
+
+/*
+        DefaultTableModel dm = new DefaultTableModel();
+        uzytkownicy = new JTable(dm);
+        String columnNames[] = new String[] {"Nick", "Status"};
+        dm.setColumnIdentifiers(columnNames);
+        //uzytkownicy.setModel(dm);
+
+        Vector<Object> data = new Vector<>();
+        data.add("admin");
+        data.add("dostępny");
+        data.add("user");
+        data.add("dostępny");
+
+        for(int i=0; i<2; i++)
+        {
+            data.get(i);
+            dm.addRow(data);
+        }
+*/
+
+
+/*        for(User user : users)
+        {
+            data.add(user);
+            data.add("dostępny");
+            dm.addRow(data);
+        }*/
+
+
         Object[][] data = {
                 {"admin", "niedostępny"},
-                {"user", "niedostępny"}
+                {"user", "niedostępny"},
+                {"SebulekPL", "niedostępny"}
         };
+
+
         uzytkownicy = new JTable(data, columnNames) {
-            public boolean isCellEditable (int data, int columnNames)
-            {
+            public boolean isCellEditable(int data, int columnNames) {
                 return false;
             } //zablokowanie edycji tabeli
         };
 
         uzytkownicy.setRowSelectionAllowed(true);
-       // uzytkownicy.setFocusable(false);
+        // uzytkownicy.setFocusable(false);
         uzytkownicy.setFillsViewportHeight(true);
         uzytkownicy.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         uzytkownicy.addMouseListener(new MouseAdapter() {

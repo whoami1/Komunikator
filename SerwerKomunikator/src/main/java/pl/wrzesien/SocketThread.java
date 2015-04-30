@@ -4,8 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.entities.request.AllMesageRequest;
 import pl.entities.request.LoginRequest;
+import pl.entities.request.MessageRequest;
 import pl.entities.request.RegisterRequest;
-import pl.entities.request.TestowaWiadomoscRequest;
 import pl.entities.response.*;
 
 import java.io.IOException;
@@ -48,16 +48,23 @@ public class SocketThread implements Runnable {
             while ((obj = ois.readObject()) != null) {
                 if (obj instanceof LoginRequest) {
                     LoginRequest loginRequest = (LoginRequest) obj;
-                    System.out.println(loginRequest.toString());
+                    LOGGER.info(log(loginRequest.toString()));
                     boolean success = us.checkCredentials(loginRequest.getLogin(), loginRequest.getPassword());
                     if (success) {
                         user = new User(loginRequest.getLogin());
                         Communication communication = new Communication(socket, new ArrayList<>());
                         onlineUsersToSocketMap.put(user, communication);
                         oos.writeObject(new LoginResponse(success));
+
                         ArrayList<User> userList = new ArrayList<>();
                         userList.addAll(onlineUsersToSocketMap.keySet());
                         oos.writeObject(new UserListResponse(userList));
+
+                        //TUTAJ
+/*                        ArrayList<User> allUsersList = new ArrayList<>();
+                        allUsersList.addAll(us.showAllUsers());
+                        oos.writeObject(new AllUsersListResponse(allUsersList));*/
+
                         LOGGER.info(log("Zalogowano uzytkownika: " + loginRequest.getLogin()));
                     } else {
                         oos.writeObject(new LoginResponse(success));
@@ -76,11 +83,10 @@ public class SocketThread implements Runnable {
                         us.newUser(registerRequest.getLogin(), registerRequest.getPassword());
                         LOGGER.info(log("Zarejestrowano uzytkownika o loginie: " + registerRequest.getLogin() + " - rozlaczam z " + socket.getRemoteSocketAddress()));
                     }
-                } else if (obj instanceof TestowaWiadomoscRequest) {
-                    String text = "Odpowiedz od serwera";
+                } else if (obj instanceof MessageRequest) {
                     LOGGER.info(onlineUsersToSocketMap.toString());
-                    TestowaWiadomoscRequest testowaWiadomoscRequest = (TestowaWiadomoscRequest) obj;
-                    onlineUsersToSocketMap.get(new User(testowaWiadomoscRequest.getUsername())).getListOfMessageResponse().add(new MessageResponse(user, testowaWiadomoscRequest.getText()));
+                    MessageRequest messageRequest = (MessageRequest) obj;
+                    onlineUsersToSocketMap.get(new User(messageRequest.getUsername())).getListOfMessageResponse().add(new MessageResponse(user, messageRequest.getText()));
                 } else if (obj instanceof AllMesageRequest) {
                     Communication communication = onlineUsersToSocketMap.get(user);
                     List<MessageResponse> listOfMessageResponse = communication.getListOfMessageResponse();

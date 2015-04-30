@@ -1,5 +1,8 @@
 package pl.wrzesien;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,43 +11,58 @@ import java.awt.event.ActionListener;
  * Created by Michał Wrzesień on 2015-03-08.
  */
 public class MainWindow extends JFrame {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MainWindow.class);
+
     private JComboBox cmbAdresSerwera;
     private JButton logowanieButton;
     private JButton rejestracjaButton;
     private JPanel mainWindow;
+    private JButton polaczZSerweremButton;
+
+    private Client client = null;
 
     public MainWindow() {
-        initComponents();
-    }
+        //Client client = new Client();
+        logowanieButton.setEnabled(false);
+        rejestracjaButton.setEnabled(false);
 
-    private void initComponents() {
-
-        Client client = new Client();
-
-        if (client.connect(getServerIpAddress())) {
-            logowanieButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    openLogowanieWindow(client);
-                    JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(mainWindow);
-                    topFrame.dispose();
+        polaczZSerweremButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                client = new Client();
+                if (client.connect(getServerIpAddress())) {
+                    JOptionPane.showMessageDialog(mainWindow, "Połączenie z serwerem zostało ustanowione...", "Informacja o połączeniu", JOptionPane.INFORMATION_MESSAGE);
+                    LOGGER.info("Połączenie z serwerem zostało ustanowione...");
+                    polaczZSerweremButton.setEnabled(false);
+                    logowanieButton.setEnabled(true);
+                    rejestracjaButton.setEnabled(true);
+                } else {
+                    JOptionPane.showMessageDialog(mainWindow, "Połączenie nie mogło zostać zrealizowane... Spróbuj ponownie...", "Błąd połączenia", JOptionPane.ERROR_MESSAGE);
+                    LOGGER.info("Połączenie nie mogło zostać zrealizowane... Spróbuj ponownie...");
                 }
-            });
+            }
+        });
 
-            rejestracjaButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    openRejestracjaWindow(client);
-                    JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(mainWindow);
-                    topFrame.dispose();
-                }
-            });
-        } else {
-            JOptionPane.showMessageDialog(mainWindow, "Połączenie nie mogło zostać zreazlizowane...", "Błąd połączenia", JOptionPane.ERROR_MESSAGE);
-        }
+        logowanieButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                openLogowanieWindow(client);
+                JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(mainWindow);
+                topFrame.dispose();
+            }
+        });
+
+        rejestracjaButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                openRejestracjaWindow(client);
+                JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(mainWindow);
+                topFrame.dispose();
+            }
+        });
     }
 
     public String getServerIpAddress() {
         String ipAddress = cmbAdresSerwera.getSelectedItem().toString();
-        System.out.println("Obecny adres IP: " + ipAddress);
+        LOGGER.info("Obecny adres IP: " + ipAddress);
         return ipAddress;
     }
 
@@ -62,13 +80,20 @@ public class MainWindow extends JFrame {
         rejestracjaWindow.showWindow();
     }
 
-    public static void main(String[] args) {
+    public void showWindow()
+    {
         JFrame frame = new JFrame("Komunikator");
-        pl.wrzesien.MainWindow mainwindow = new MainWindow();
-        frame.setContentPane(mainwindow.mainWindow);
+        frame.setContentPane(mainWindow);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
+        mainWindow.getRootPane().setDefaultButton(polaczZSerweremButton);
+    }
+
+    public static void main(String[] args)
+    {
+        pl.wrzesien.MainWindow mainWindow = new MainWindow();
+        mainWindow.showWindow();
     }
 }
 

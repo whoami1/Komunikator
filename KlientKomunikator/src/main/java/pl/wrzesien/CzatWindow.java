@@ -30,10 +30,12 @@ public class CzatWindow {
             public void actionPerformed(ActionEvent e) {
                 //txtCzat.append(user.getUserNick()+ ": " + txtWiadomosc.getText() + "\n");
                 txtCzat.append(nazwaUzytkownika + ": " + txtWiadomosc.getText() + "\n");
-                client.wyslanieTestowejWiadomosciNaSerwer(user.getUserNick(), txtWiadomosc.getText());
+                client.wyslanieWiadomosciNaSerwer(user.getUserNick(), txtWiadomosc.getText());
                 txtWiadomosc.setText(null);
             }
         });
+
+
     }
 
     public void showWindow() {

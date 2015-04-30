@@ -10,7 +10,7 @@
     </properties>
     <border type="line" title="Kontakty"/>
     <children>
-      <scrollpane id="15486">
+      <scrollpane id="15486" binding="jScrollPaneUsersTable">
         <constraints>
           <grid row="1" column="0" row-span="6" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
