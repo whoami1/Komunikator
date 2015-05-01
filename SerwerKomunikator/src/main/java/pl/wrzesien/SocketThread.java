@@ -62,7 +62,11 @@ public class SocketThread implements Runnable {
                         oos.writeObject(new LoginResponse(success));
 
                         ArrayList<UserInfo> allUsersList = new ArrayList<>();
-                        allUsersList.addAll(userService.showAllUsers());
+                        allUsersList.add(userStatus);
+
+                        //To jest ju¿ zrobione w ServerMain
+                        //allUsersList.addAll(userService.showAllUsers());
+
                         oos.writeObject(new AllUsersListResponse(allUsersList));
 
                         LOGGER.info(log("Zalogowano uzytkownika: " + loginRequest.getLogin()));
@@ -83,16 +87,21 @@ public class SocketThread implements Runnable {
                         userService.newUser(registerRequest.getLogin(), registerRequest.getPassword());
                         LOGGER.info(log("Zarejestrowano uzytkownika o loginie: " + registerRequest.getLogin() + " - rozlaczam z " + socket.getRemoteSocketAddress()));
                     }
-                } else if (obj instanceof MessageRequest) {
+                }
+                //chwilowo wy³¹czam!!!
+                /*else if (obj instanceof MessageRequest)
+                {
                     LOGGER.info(allUsersToCommunicationMap.toString());
                     MessageRequest messageRequest = (MessageRequest) obj;
                     allUsersToCommunicationMap.get(new UserInfo(messageRequest.getUsername())).getListOfMessageResponse().add(new MessageResponse(user, messageRequest.getText()));
-                } else if (obj instanceof AllMesageRequest) {
+                }
+                else if (obj instanceof AllMesageRequest)
+                {
                     Communication communication = allUsersToCommunicationMap.get(user);
                     List<MessageResponse> listOfMessageResponse = communication.getListOfMessageResponse();
                     oos.writeObject(new AllMessageResponse(listOfMessageResponse));
                     allUsersToCommunicationMap.put(user, new Communication(communication.getSocket(), new ArrayList<>(), user));
-                }
+                }*/
             }
         } catch (Exception e) {
             e.printStackTrace();

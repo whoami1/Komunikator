@@ -44,10 +44,10 @@ public class Client {
         return null;
     }
 
-    public List<UserInfo> readUserSet() {
+/*    public List<UserInfo> readUserSet() {
         UserListResponse userListResponse = (UserListResponse) read();
         return userListResponse.getUserInfoList();
-    }
+    }*/
 
     public List<UserInfo> listaWszystkichUzytkownikow() {
         AllUsersListResponse allUsersListResponse = (AllUsersListResponse) read();

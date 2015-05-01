@@ -52,8 +52,11 @@ public class LogowanieWindow extends JFrame {
 
     private void logIn() {
         if (client.login(getLogin(), getHaslo())) {
-            List<UserInfo> userInfos = client.readUserSet();
-            LOGGER.info(userInfos.toString());
+            //List<UserInfo> userInfos = client.readUserSet();
+            //LOGGER.info(userInfos.toString());
+            List<UserInfo> userInfo = client.listaWszystkichUzytkownikow();
+            LOGGER.info(userInfo.toString());
+
             KontaktyWindow kontaktyWindow = new KontaktyWindow(client, getLogin());
             kontaktyWindow.showKontaktyWindow();
             ((JFrame) SwingUtilities.getWindowAncestor(logowanieWindow)).setVisible(false);

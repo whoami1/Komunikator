@@ -61,8 +61,8 @@ public class KontaktyWindow {
     private void createUIComponents() {
         // TODO: place custom component creation code here
 
-        List<UserInfo> allUserInfos = client.listaWszystkichUzytkownikow();
-        LOGGER.info("Zarejestrowani uzytkownicy: " + allUserInfos.toString());
+        //List<UserInfo> allUserInfo = client.listaWszystkichUzytkownikow();
+        //LOGGER.info("Zarejestrowani uzytkownicy: " + allUserInfo.toString());
 
         String columnNames[] = new String[] {"Nick", "Status"};
 
@@ -118,10 +118,11 @@ public class KontaktyWindow {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    String user = (String) uzytkownicy.getValueAt(uzytkownicy.getSelectedRow(), 0);
-                    System.out.println("***************" + user);
-                    CzatWindow czatWindow = new CzatWindow(new UserInfo(user), client, nazwaUzytkownika);
-                    czatWindow.showWindow();
+                    String userNick = (String) uzytkownicy.getValueAt(uzytkownicy.getSelectedRow(), 0);
+                    System.out.println("***************" + userNick);
+                    //chwilowo wyłączone!!
+                    /*CzatWindow czatWindow = new CzatWindow(new UserInfo(userNick), client, nazwaUzytkownika);
+                    czatWindow.showWindow();*/
                 }
             }
         });

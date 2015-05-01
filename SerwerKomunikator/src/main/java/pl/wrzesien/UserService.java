@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class UserService {
     private Session session;
-    private ArrayList<String> userList = new ArrayList<>();
+    //private ArrayList<String> userList = new ArrayList<>();
 
     public UserService() {
         this.session = HibernateUtil.getSessionFactory().openSession();
@@ -49,11 +49,11 @@ public class UserService {
         session.getTransaction().commit();
     }
 
-    public List<User> showAllUsers() {
+    public List<String> showAllUsers() {
         session.beginTransaction();
 
         // poprawić, żeby tylko pobierany był userNick
-        List<User> result = session.createQuery("SELECT userNick FROM User").list();
+        List<String> result = session.createQuery("SELECT userNick FROM User").list();
 
         session.getTransaction().commit();
         return result;

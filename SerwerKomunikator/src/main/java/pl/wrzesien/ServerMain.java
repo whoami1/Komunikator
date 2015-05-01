@@ -2,7 +2,6 @@ package pl.wrzesien;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pl.entities.response.MessageResponse;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -16,7 +15,7 @@ public class ServerMain extends Thread {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ServerMain.class);
     private ServerSocket serverSocket;
-    private UserService us = new UserService();
+    private UserService userService = new UserService();
 
     //private Map<UserInfo, Communication> userSocketMap = new HashMap<>();
     private Map<String, Communication> allUsersToCommunicationMap = new HashMap<>();
@@ -25,9 +24,10 @@ public class ServerMain extends Thread {
         serverSocket = new ServerSocket(port);
         serverSocket.setSoTimeout(1000000);
 
-        for (User user : us.showAllUsers()) {
-            UserInfo userInfo = new UserInfo(user.getUserNick(), false);
-            allUsersToCommunicationMap.put(user.getUserNick(), new Communication(new ArrayList<>(), userInfo));
+        for (String user : userService.showAllUsers()) {
+            LOGGER.info("Zarejestrowani: " + userService.showAllUsers().toString());
+            UserInfo userInfo = new UserInfo(user, false);
+            allUsersToCommunicationMap.put(user, new Communication(new ArrayList<>(), userInfo));
         }
 
     }
@@ -41,7 +41,7 @@ public class ServerMain extends Thread {
             try {
                 LOGGER.info(log("Oczekiwanie na klienta na porcie " + serverSocket.getLocalPort() + "..."));
                 Socket server = serverSocket.accept();//nowy watek + przeslanie do niego tego socketa + kontynuacja petli
-                new Thread(new SocketThread(allUsersToCommunicationMap, server, us)).start();
+                new Thread(new SocketThread(allUsersToCommunicationMap, server, userService)).start();
             } catch (SocketTimeoutException s) {
                 LOGGER.info(log("Limit czasu socketu zostal przekroczony!"));
                 break;
