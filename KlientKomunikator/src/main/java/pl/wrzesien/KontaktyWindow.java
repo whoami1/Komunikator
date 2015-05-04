@@ -28,10 +28,12 @@ public class KontaktyWindow {
 
     private String nazwaUzytkownika;
     private Client client;
+    private List<UserInfo> allUsers;
 
-    public KontaktyWindow(Client client, String nazwaUzytkownika) {
+    public KontaktyWindow(Client client, String nazwaUzytkownika, List<UserInfo> allUsers) {
         this.nazwaUzytkownika = nazwaUzytkownika;
         this.client = client;
+        this.allUsers = allUsers;
         initComponents();
 
     }
@@ -97,11 +99,21 @@ public class KontaktyWindow {
         }*/
 
 
+        Object[][] data = new Object[allUsers.size()][2];
+        for(int i=0; i<allUsers.size(); i++){
+            data[i][0] = allUsers.get(i).getUserNick();
+            data[i][1] = allUsers.get(i).getUserStatus();
+        }
+
+
+/*
+
         Object[][] data = {
                 {"admin", "niedostępny"},
                 {"user", "niedostępny"},
                 {"SebulekPL", "niedostępny"}
         };
+*/
 
 
         uzytkownicy = new JTable(data, columnNames) {
@@ -131,7 +143,7 @@ public class KontaktyWindow {
 
     public void showKontaktyWindow() {
         JFrame frame = new JFrame("Komunikator - Kontakty");
-        JPanel kontaktyWindow = new KontaktyWindow(client, nazwaUzytkownika).kontaktyWindow;
+        JPanel kontaktyWindow = new KontaktyWindow(client, nazwaUzytkownika, allUsers).kontaktyWindow;
         frame.setContentPane(kontaktyWindow);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();

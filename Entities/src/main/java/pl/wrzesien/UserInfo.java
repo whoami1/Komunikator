@@ -30,4 +30,12 @@ public class UserInfo implements Serializable {
     public void setUserStatus(boolean userStatus) {
         this.userStatus = userStatus;
     }
+
+    @Override
+    public String toString() {
+        return "UserInfo{" +
+                "userNick='" + userNick + '\'' +
+                ", userStatus=" + userStatus +
+                '}';
+    }
 }

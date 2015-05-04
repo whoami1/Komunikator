@@ -2,17 +2,18 @@ package pl.wrzesien;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pl.entities.request.AllMesageRequest;
 import pl.entities.request.LoginRequest;
-import pl.entities.request.MessageRequest;
 import pl.entities.request.RegisterRequest;
-import pl.entities.response.*;
+import pl.entities.response.AllUsersListResponse;
+import pl.entities.response.LoginResponse;
+import pl.entities.response.RegistrationResponse;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -56,18 +57,17 @@ public class SocketThread implements Runnable {
                         Communication communication = allUsersToCommunicationMap.get(loginRequest.getLogin());
                         UserInfo userStatus = communication.getUserInfo();
 
-                        //setter który zmieni status
+                        //setter ktï¿½ry zmieni status
                         userStatus.setUserStatus(true);
 
                         oos.writeObject(new LoginResponse(success));
 
-                        ArrayList<UserInfo> allUsersList = new ArrayList<>();
-                        allUsersList.add(userStatus);
-
-                        //To jest ju¿ zrobione w ServerMain
-                        //allUsersList.addAll(userService.showAllUsers());
-
-                        oos.writeObject(new AllUsersListResponse(allUsersList));
+                        Collection<Communication> communications = allUsersToCommunicationMap.values();
+                        List<UserInfo> userInfoList = new ArrayList<>();
+                        for (Communication c : communications) {
+                            userInfoList.add(c.getUserInfo());
+                        }
+                        oos.writeObject(new AllUsersListResponse(userInfoList));
 
                         LOGGER.info(log("Zalogowano uzytkownika: " + loginRequest.getLogin()));
                     } else {
@@ -88,7 +88,7 @@ public class SocketThread implements Runnable {
                         LOGGER.info(log("Zarejestrowano uzytkownika o loginie: " + registerRequest.getLogin() + " - rozlaczam z " + socket.getRemoteSocketAddress()));
                     }
                 }
-                //chwilowo wy³¹czam!!!
+                //chwilowo wyï¿½ï¿½czam!!!
                 /*else if (obj instanceof MessageRequest)
                 {
                     LOGGER.info(allUsersToCommunicationMap.toString());

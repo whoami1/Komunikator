@@ -54,10 +54,10 @@ public class LogowanieWindow extends JFrame {
         if (client.login(getLogin(), getHaslo())) {
             //List<UserInfo> userInfos = client.readUserSet();
             //LOGGER.info(userInfos.toString());
-            List<UserInfo> userInfo = client.listaWszystkichUzytkownikow();
-            LOGGER.info(userInfo.toString());
+            List<UserInfo> allUsers = client.listaWszystkichUzytkownikow();
+            LOGGER.info(allUsers.toString());
 
-            KontaktyWindow kontaktyWindow = new KontaktyWindow(client, getLogin());
+            KontaktyWindow kontaktyWindow = new KontaktyWindow(client, getLogin(), allUsers);
             kontaktyWindow.showKontaktyWindow();
             ((JFrame) SwingUtilities.getWindowAncestor(logowanieWindow)).setVisible(false);
         } else {
