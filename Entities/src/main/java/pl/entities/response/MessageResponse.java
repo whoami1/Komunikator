@@ -10,17 +10,17 @@ import java.io.Serializable;
 public class MessageResponse implements Serializable {
     private static final long serialVersionUID = 1;
 
-    private UserInfo userInfo;
+    private String deliveryUsername;
     private String message;
 
-    public MessageResponse(UserInfo userInfo, String message) {
+    public MessageResponse(String deliveryUsername, String message) { //nadawca
 
-        this.userInfo = userInfo;
+        this.deliveryUsername = deliveryUsername;
         this.message = message;
     }
 
-    public UserInfo getUserInfo() {
-        return userInfo;
+    public String getUserInfo() {
+        return deliveryUsername;
     }
 
     public String getMessage() {
@@ -30,7 +30,7 @@ public class MessageResponse implements Serializable {
     @Override
     public String toString() {
         return "MessageResponse{" +
-                "userInfo=" + userInfo +
+                "deliveryUsername=" + deliveryUsername +
                 ", message='" + message + '\'' +
                 '}';
     }

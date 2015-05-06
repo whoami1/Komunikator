@@ -2,11 +2,11 @@ package pl.wrzesien;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pl.entities.request.AllMesageRequest;
 import pl.entities.request.LoginRequest;
+import pl.entities.request.SendMessageRequest;
 import pl.entities.request.RegisterRequest;
-import pl.entities.response.AllUsersListResponse;
-import pl.entities.response.LoginResponse;
-import pl.entities.response.RegistrationResponse;
+import pl.entities.response.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -38,7 +38,7 @@ public class SocketThread implements Runnable {
     public void run() {
         ObjectInputStream ois = null;
         ObjectOutputStream oos = null;
-        User user = null;
+        String username = null; //uzytkownik danego watku
         try {
 
             LOGGER.info(log("Polaczono z" + socket.getRemoteSocketAddress()));
@@ -54,10 +54,10 @@ public class SocketThread implements Runnable {
                     LOGGER.info(log(loginRequest.toString()));
                     boolean success = userService.checkCredentials(loginRequest.getLogin(), loginRequest.getPassword());
                     if (success) {
-                        Communication communication = allUsersToCommunicationMap.get(loginRequest.getLogin());
-                        UserInfo userStatus = communication.getUserInfo();
+                        username = loginRequest.getLogin();
+                        Communication communication = allUsersToCommunicationMap.get(username);
 
-                        //setter kt�ry zmieni status
+                        UserInfo userStatus = communication.getUserInfo();
                         userStatus.setUserStatus(true);
 
                         oos.writeObject(new LoginResponse(success));
@@ -80,6 +80,9 @@ public class SocketThread implements Runnable {
                     boolean succes = userService.checkIfLoginExists(registerRequest.getLogin());
 
                     if (succes) {
+                        UserInfo userInfo = new UserInfo(registerRequest.getLogin(), false);
+                        Communication communication = new Communication(new ArrayList<>(), userInfo);
+                        allUsersToCommunicationMap.put(registerRequest.getLogin(), communication);
                         oos.writeObject(new RegistrationResponse(succes));
                         LOGGER.info(log("Uzytkownik o podanym loginie: " + registerRequest.getLogin() + " juz istnieje - rozlaczam z " + socket.getRemoteSocketAddress()));
                     } else {
@@ -87,21 +90,17 @@ public class SocketThread implements Runnable {
                         userService.newUser(registerRequest.getLogin(), registerRequest.getPassword());
                         LOGGER.info(log("Zarejestrowano uzytkownika o loginie: " + registerRequest.getLogin() + " - rozlaczam z " + socket.getRemoteSocketAddress()));
                     }
-                }
-                //chwilowo wy��czam!!!
-                /*else if (obj instanceof MessageRequest)
-                {
+                } else if (obj instanceof SendMessageRequest) {
                     LOGGER.info(allUsersToCommunicationMap.toString());
-                    MessageRequest messageRequest = (MessageRequest) obj;
-                    allUsersToCommunicationMap.get(new UserInfo(messageRequest.getUsername())).getListOfMessageResponse().add(new MessageResponse(user, messageRequest.getText()));
-                }
-                else if (obj instanceof AllMesageRequest)
-                {
-                    Communication communication = allUsersToCommunicationMap.get(user);
+                    SendMessageRequest sendMessageRequest = (SendMessageRequest) obj;
+                    Communication communication = allUsersToCommunicationMap.get(sendMessageRequest.getUsername());
+                    communication.getListOfMessageResponse().add(new MessageResponse(username, sendMessageRequest.getText()));
+                } else if (obj instanceof AllMesageRequest) {
+                    Communication communication = allUsersToCommunicationMap.get(username);
                     List<MessageResponse> listOfMessageResponse = communication.getListOfMessageResponse();
                     oos.writeObject(new AllMessageResponse(listOfMessageResponse));
-                    allUsersToCommunicationMap.put(user, new Communication(communication.getSocket(), new ArrayList<>(), user));
-                }*/
+                    communication.setListOfMessageResponse(new ArrayList<>());
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -125,9 +124,12 @@ public class SocketThread implements Runnable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            if (user != null) {
-                allUsersToCommunicationMap.remove(user);
-                LOGGER.info("Uzytkownik: " + user.getUserNick() + " rozlaczyl sie");
+            if (username != null) {
+                Communication userDisconnected = allUsersToCommunicationMap.get(username);
+                LOGGER.info("Uzytkownik: " + "*" +  username + "*" + " rozlaczyl sie");
+
+                UserInfo userStatus = userDisconnected.getUserInfo();
+                userStatus.setUserStatus(false);
             }
         }
     }

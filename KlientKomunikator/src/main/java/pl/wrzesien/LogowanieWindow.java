@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.List;
 
 /**
@@ -18,17 +20,20 @@ public class LogowanieWindow extends JFrame {
     private JPanel logowanieWindow;
     private JButton anulujButton;
     private JButton zalogujButton;
+
+    private MainWindow mainWindow;
     private Client client;
 
-    public LogowanieWindow(Client client) {
+    public LogowanieWindow(MainWindow mainWindow, Client client) {
+        this.mainWindow = mainWindow;
         this.client = client;
 
         anulujButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(logowanieWindow);
-                topFrame.dispose();
-                MainWindow.getFrames()[0].setVisible(true);
+                closeLogowanieWindow();
+                //MainWindow mainWindow = new MainWindow();
+                mainWindow.showMainWindow();
             }
         });
 
@@ -36,6 +41,16 @@ public class LogowanieWindow extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 checkIfAllCredentialsEntered();
+            }
+        });
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                if (client != null) {
+                    client.closeConnection();
+                    LOGGER.info("Połączenie z serwerem zostało zakończone...");
+                }
             }
         });
     }
@@ -52,14 +67,13 @@ public class LogowanieWindow extends JFrame {
 
     private void logIn() {
         if (client.login(getLogin(), getHaslo())) {
-            //List<UserInfo> userInfos = client.readUserSet();
-            //LOGGER.info(userInfos.toString());
             List<UserInfo> allUsers = client.listaWszystkichUzytkownikow();
-            LOGGER.info(allUsers.toString());
+            LOGGER.info("Zalogowano uzytkownika: " + getLogin());
+            LOGGER.info("Zarejestrowani uzytkownicy: " + allUsers.toString());
 
             KontaktyWindow kontaktyWindow = new KontaktyWindow(client, getLogin(), allUsers);
             kontaktyWindow.showKontaktyWindow();
-            ((JFrame) SwingUtilities.getWindowAncestor(logowanieWindow)).setVisible(false);
+            closeLogowanieWindow();
         } else {
             JOptionPane.showMessageDialog(logowanieWindow, "Nieprawidłowy login albo hasło...", "Błąd uwierzytelniania", JOptionPane.ERROR_MESSAGE);
         }
@@ -67,24 +81,27 @@ public class LogowanieWindow extends JFrame {
 
 
     public String getLogin() {
-        String login = String.valueOf(txtLogin.getText());
-        System.out.println("Login: " + login);
-        return login;
+        return String.valueOf(txtLogin.getText());
     }
 
     public String getHaslo() {
-        String haslo = String.valueOf(txtHaslo.getPassword());
-        System.out.println("Haslo: " + haslo);
-        return haslo;
+        return String.valueOf(txtHaslo.getPassword());
     }
 
-
-    public void showWindow() {
-        setContentPane(logowanieWindow);
+    public void showLogowanieWindow() {
         setTitle("Komunikator - Logowanie");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setContentPane(logowanieWindow);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         pack();
+        setLocationRelativeTo(null); //okno na srodku ekranu
         setVisible(true);
         getRootPane().setDefaultButton(zalogujButton);
     }
+
+    public void closeLogowanieWindow()
+    {
+        this.setVisible(false);
+        this.dispose();
+    }
+
 }

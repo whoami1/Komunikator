@@ -42,6 +42,7 @@ public class OAplikacjiDialog extends JDialog {
     public static void openOAplikacjiDialog() {
         OAplikacjiDialog dialog = new OAplikacjiDialog();
         dialog.pack();
+        dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
         //System.exit(0);
     }

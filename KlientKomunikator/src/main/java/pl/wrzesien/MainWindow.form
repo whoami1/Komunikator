@@ -28,7 +28,7 @@
         </constraints>
         <properties>
           <font size="14"/>
-          <text value="Logowanie"/>
+          <text value="&amp;Logowanie"/>
         </properties>
       </component>
       <component id="5097c" class="javax.swing.JButton" binding="rejestracjaButton" default-binding="true">
@@ -37,7 +37,7 @@
         </constraints>
         <properties>
           <font size="14"/>
-          <text value="Rejestracja"/>
+          <text value="&amp;Rejestracja"/>
         </properties>
       </component>
       <component id="5248c" class="javax.swing.JButton" binding="polaczZSerweremButton">
@@ -47,7 +47,7 @@
         <properties>
           <font size="14"/>
           <horizontalTextPosition value="0"/>
-          <text value="Połącz z serwerem"/>
+          <text value="&amp;Połącz z serwerem"/>
         </properties>
       </component>
       <hspacer id="b9c76">

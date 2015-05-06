@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 /**
  * Created by Michał Wrzesień on 2015-03-08.
@@ -46,16 +48,24 @@ public class MainWindow extends JFrame {
         logowanieButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 openLogowanieWindow(client);
-                JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(mainWindow);
-                topFrame.dispose();
+                closeMainWindow();
             }
         });
 
         rejestracjaButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 openRejestracjaWindow(client);
-                JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(mainWindow);
-                topFrame.dispose();
+                closeMainWindow();
+            }
+        });
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                if (client != null) {
+                    client.closeConnection();
+                    LOGGER.info("Połączenie z serwerem zostało zakończone...");
+                }
             }
         });
     }
@@ -71,29 +81,34 @@ public class MainWindow extends JFrame {
     }
 
     public void openLogowanieWindow(Client client) {
-        LogowanieWindow logowanieWindow = new LogowanieWindow(client);
-        logowanieWindow.showWindow();
+        LogowanieWindow logowanieWindow = new LogowanieWindow(this, client);
+        logowanieWindow.showLogowanieWindow();
     }
 
     public void openRejestracjaWindow(Client client) {
-        RejestracjaWindow rejestracjaWindow = new RejestracjaWindow(client);
-        rejestracjaWindow.showWindow();
+        RejestracjaWindow rejestracjaWindow = new RejestracjaWindow(this, client);
+        rejestracjaWindow.showRejestracjaWindow();
     }
 
-    public void showWindow()
-    {
-        JFrame frame = new JFrame("Komunikator");
-        frame.setContentPane(mainWindow);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
+    public void showMainWindow() {
+        setTitle("Komunikator");
+        setContentPane(mainWindow);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        pack();
+        setLocationRelativeTo(null);
+        setVisible(true);
+
         mainWindow.getRootPane().setDefaultButton(polaczZSerweremButton);
     }
 
-    public static void main(String[] args)
-    {
+    public void closeMainWindow() {
+        this.setVisible(false);
+        this.dispose();
+    }
+
+    public static void main(String[] args) {
         pl.wrzesien.MainWindow mainWindow = new MainWindow();
-        mainWindow.showWindow();
+        mainWindow.showMainWindow();
     }
 }
 

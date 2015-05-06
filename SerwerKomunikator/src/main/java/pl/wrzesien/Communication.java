@@ -25,4 +25,8 @@ public class Communication {
     public List<MessageResponse> getListOfMessageResponse() {
         return listOfMessageResponse;
     }
+
+    public void setListOfMessageResponse(List<MessageResponse> listOfMessageResponse) {
+        this.listOfMessageResponse = listOfMessageResponse;
+    }
 }

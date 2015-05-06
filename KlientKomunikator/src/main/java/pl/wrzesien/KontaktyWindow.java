@@ -2,44 +2,58 @@ package pl.wrzesien;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pl.entities.response.MessageResponse;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.util.List;
 
 /**
  * Created by Michał Wrzesień on 2015-03-22.
  */
-public class KontaktyWindow {
+public class KontaktyWindow extends JFrame {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(pl.wrzesien.KontaktyWindow.class);
+
     private JButton historiaButton;
     private JButton dodajKontaktButton;
     private JTable uzytkownicy;
     private JPanel kontaktyWindow;
     private JButton oAplikacjiButton;
     private JLabel lblUruchomionyUzytkownik;
-    private JButton testWiadDoSerwButton;
-    private Zegar zegar1;
     private JButton odbierzButton;
-    private JScrollPane jScrollPaneUsersTable;
+    private JButton wylogujButton;
 
-    private String nazwaUzytkownika;
+    private String mojNick;
+    private String nadawca = null;
+    private CzatWindow czatWindow;
+    private boolean oknoCzatuZostaloOtwarte = false;
+
     private Client client;
     private List<UserInfo> allUsers;
 
-    public KontaktyWindow(Client client, String nazwaUzytkownika, List<UserInfo> allUsers) {
-        this.nazwaUzytkownika = nazwaUzytkownika;
+    public KontaktyWindow(Client client, String mojNick, List<UserInfo> allUsers) {
+        this.mojNick = mojNick;
         this.client = client;
         this.allUsers = allUsers;
-        initComponents();
 
-    }
+        lblUruchomionyUzytkownik.setText("Konto użytkownika: " + mojNick);
 
-    private void initComponents() {
-        lblUruchomionyUzytkownik.setText("Konto użytkownika: " + nazwaUzytkownika);
+        //new Thread(new CheckIfSthNewOnTheServerThread(this)).start();
+
+        wylogujButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (client != null) {
+                    client.closeConnection();
+                    LOGGER.info("Połączenie z serwerem zostało zakończone, użytkownik: " + "*" + mojNick + "*" + " wylogował się...");
+                }
+                closeKontaktyWindow();
+                MainWindow mainWindow = new MainWindow();
+                mainWindow.showMainWindow();
+            }
+        });
+
         oAplikacjiButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 OAplikacjiDialog.openOAplikacjiDialog();
@@ -55,74 +69,69 @@ public class KontaktyWindow {
         odbierzButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                client.odebranieWiadomosciZSerwera();
+                przyciskOdbierz();
+            }
+        });
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                if (client != null) {
+                    client.closeConnection();
+                    LOGGER.info("Połączenie z serwerem zostało zakończone...");
+                }
             }
         });
     }
 
-    private void createUIComponents() {
-        // TODO: place custom component creation code here
+    public void przyciskOdbierz() {
+        List<MessageResponse> messageResponses = client.odebranieWiadomosciZSerwera();
 
-        //List<UserInfo> allUserInfo = client.listaWszystkichUzytkownikow();
-        //LOGGER.info("Zarejestrowani uzytkownicy: " + allUserInfo.toString());
+        if (!messageResponses.isEmpty()) {
+            MessageResponse userNick = messageResponses.get(0);
+            nadawca = userNick.getUserInfo();
 
-        String columnNames[] = new String[] {"Nick", "Status"};
+            if (oknoCzatuZostaloOtwarte == false) {
+                czatWindow = new CzatWindow(nadawca, client, mojNick);
+                czatWindow.showCzatWindow();
+                oknoCzatuZostaloOtwarte = true;
+            }
 
-
-
-/*
-        DefaultTableModel dm = new DefaultTableModel();
-        uzytkownicy = new JTable(dm);
-        String columnNames[] = new String[] {"Nick", "Status"};
-        dm.setColumnIdentifiers(columnNames);
-        //uzytkownicy.setModel(dm);
-
-        Vector<Object> data = new Vector<>();
-        data.add("admin");
-        data.add("dostępny");
-        data.add("user");
-        data.add("dostępny");
-
-        for(int i=0; i<2; i++)
-        {
-            data.get(i);
-            dm.addRow(data);
+            if (oknoCzatuZostaloOtwarte == true) {
+                for (int i = 0; i < messageResponses.size(); i++) {
+                    MessageResponse messageResponse = messageResponses.get(i);
+                    nadawca = messageResponse.getUserInfo();
+                    czatWindow.setTxtRozmowaWOknieCzatu(nadawca, messageResponse.getMessage());
+                }
+            }
         }
-*/
+    }
 
+    private void createUIComponents() {
 
-/*        for(UserInfo user : users)
-        {
-            data.add(user);
-            data.add("dostępny");
-            dm.addRow(data);
-        }*/
-
+        String columnNames[] = new String[]{"Nick", "Status"};
 
         Object[][] data = new Object[allUsers.size()][2];
-        for(int i=0; i<allUsers.size(); i++){
+        for (int i = 0; i < allUsers.size(); i++) {
             data[i][0] = allUsers.get(i).getUserNick();
             data[i][1] = allUsers.get(i).getUserStatus();
+
+            //Podmiana statusu z boolean na tekstowy
+            if (data[i][1].equals(true)) {
+                data[i][1] = "dostępny";
+            } else {
+                data[i][1] = "niedostępny";
+            }
         }
-
-
-/*
-
-        Object[][] data = {
-                {"admin", "niedostępny"},
-                {"user", "niedostępny"},
-                {"SebulekPL", "niedostępny"}
-        };
-*/
-
 
         uzytkownicy = new JTable(data, columnNames) {
             public boolean isCellEditable(int data, int columnNames) {
                 return false;
-            } //zablokowanie edycji tabeli
+            } //zablokowanie edycji komorek tabeli
         };
 
         uzytkownicy.setRowSelectionAllowed(true);
+
         // uzytkownicy.setFocusable(false);
         uzytkownicy.setFillsViewportHeight(true);
         uzytkownicy.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -130,23 +139,28 @@ public class KontaktyWindow {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    String userNick = (String) uzytkownicy.getValueAt(uzytkownicy.getSelectedRow(), 0);
-                    System.out.println("***************" + userNick);
-                    //chwilowo wyłączone!!
-                    /*CzatWindow czatWindow = new CzatWindow(new UserInfo(userNick), client, nazwaUzytkownika);
-                    czatWindow.showWindow();*/
+                    String kontaktZListyUzytkownikow = (String) uzytkownicy.getValueAt(uzytkownicy.getSelectedRow(), 0);
+                    System.out.println("***************" + kontaktZListyUzytkownikow);
+                    czatWindow = new CzatWindow(kontaktZListyUzytkownikow, client, mojNick);
+                    czatWindow.showCzatWindow();
+                    oknoCzatuZostaloOtwarte = true;
                 }
             }
         });
-
     }
 
     public void showKontaktyWindow() {
-        JFrame frame = new JFrame("Komunikator - Kontakty");
-        JPanel kontaktyWindow = new KontaktyWindow(client, nazwaUzytkownika, allUsers).kontaktyWindow;
-        frame.setContentPane(kontaktyWindow);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
+        setTitle("Komunikator - Kontakty");
+        //JPanel kontaktyWindow = new KontaktyWindow(client, mojNick, allUsers).kontaktyWindow;
+        setContentPane(kontaktyWindow);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        pack();
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+
+    public void closeKontaktyWindow() {
+        this.setVisible(false);
+        this.dispose();
     }
 }

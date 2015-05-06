@@ -4,12 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.entities.request.AllMesageRequest;
 import pl.entities.request.LoginRequest;
-import pl.entities.request.MessageRequest;
+import pl.entities.request.SendMessageRequest;
 import pl.entities.request.RegisterRequest;
 import pl.entities.response.*;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,11 +45,6 @@ public class Client {
         return null;
     }
 
-/*    public List<UserInfo> readUserSet() {
-        UserListResponse userListResponse = (UserListResponse) read();
-        return userListResponse.getUserInfoList();
-    }*/
-
     public List<UserInfo> listaWszystkichUzytkownikow() {
         AllUsersListResponse allUsersListResponse = (AllUsersListResponse) read();
         return allUsersListResponse.getAllUsersList();
@@ -78,21 +74,24 @@ public class Client {
 
     public void wyslanieWiadomosciNaSerwer(String userLogin, String text) {
         try {
-            out.writeObject(new MessageRequest(userLogin, text));
+            out.writeObject(new SendMessageRequest(userLogin, text));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void odebranieWiadomosciZSerwera() {
+    public List<MessageResponse> odebranieWiadomosciZSerwera() {
         try {
             out.writeObject(new AllMesageRequest());
             AllMessageResponse allMessageResponse = (AllMessageResponse) read();
             LOGGER.info(allMessageResponse.toString());
-            allMessageResponse.getMessageResponseList().toString();
+            List<MessageResponse> messageResponseList = allMessageResponse.getMessageResponseList();
+            messageResponseList.toString();
+            return messageResponseList;
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return new ArrayList<>();
     }
 
     public boolean connect(String serverIp) {
@@ -112,6 +111,28 @@ public class Client {
         } catch (IOException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public void closeConnection() {
+        if (out != null) {
+            try {
+                out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        if (in != null) {
+            try {
+                in.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            client.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

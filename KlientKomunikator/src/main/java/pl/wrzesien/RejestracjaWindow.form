@@ -40,7 +40,7 @@
         </constraints>
         <properties>
           <font size="14"/>
-          <text value="Zarejestruj"/>
+          <text value="&amp;Zarejestruj"/>
         </properties>
       </component>
       <component id="46c6f" class="javax.swing.JTextField" binding="txtLogin">
@@ -59,7 +59,7 @@
         </constraints>
         <properties>
           <font size="14"/>
-          <text value="Anuluj"/>
+          <text value="&amp;Anuluj"/>
         </properties>
       </component>
       <component id="c56f3" class="javax.swing.JLabel">

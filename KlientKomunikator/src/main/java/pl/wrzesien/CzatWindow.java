@@ -7,43 +7,48 @@ import java.awt.event.ActionListener;
 /**
  * Created by Michał Wrzesień on 2015-03-24.
  */
-public class CzatWindow {
+public class CzatWindow extends JFrame {
     private JPanel czatWindow;
-    private JTextArea txtCzat;
+    private JTextArea txtRozmowaWOknieCzatu;
     private JTextField txtWiadomosc;
     private JButton wyslijButton;
     private JLabel lblUruchomionyUzytkownik;
-    private UserInfo userInfo;
+    private String odbiorca;
     private Client client;
-    private String nazwaUzytkownika;
+    private String nadawca;
 
-    public CzatWindow(UserInfo userInfo, Client client, String nazwaUzytkownika) {
-        this.userInfo = userInfo;
+    public CzatWindow(String odbiorca, Client client, String nadawca) {
         this.client = client;
-        this.nazwaUzytkownika = nazwaUzytkownika;
+        this.odbiorca = odbiorca;
+        this.nadawca = nadawca;
 
-        txtCzat.setEditable(false);
-        lblUruchomionyUzytkownik.setText("Użytkownik: " + "\"" + nazwaUzytkownika + "\"" + " rozmowa z: " + "\"" + userInfo.getUserNick() + "\"");
-        
+        txtRozmowaWOknieCzatu.setEditable(false);
+        lblUruchomionyUzytkownik.setText("Użytkownik: " + "\"" + nadawca + "\"" + " rozmowa z: " + "\"" + odbiorca + "\"");
+
         wyslijButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //txtCzat.append(userInfo.getUserNick()+ ": " + txtWiadomosc.getText() + "\n");
-                txtCzat.append(nazwaUzytkownika + ": " + txtWiadomosc.getText() + "\n");
-                client.wyslanieWiadomosciNaSerwer(userInfo.getUserNick(), txtWiadomosc.getText());
+                //txtRozmowaWOknieCzatu.append(userInfo.getUserNick()+ ": " + txtWiadomosc.getText() + "\n");
+                //txtRozmowaWOknieCzatu.append(nadawca + ": " + txtWiadomosc.getText() + "\n");
+                setTxtRozmowaWOknieCzatu(nadawca, txtWiadomosc.getText());
+                client.wyslanieWiadomosciNaSerwer(odbiorca, txtWiadomosc.getText());
                 txtWiadomosc.setText(null);
             }
         });
-
-
     }
 
-    public void showWindow() {
-        JFrame frame = new JFrame("Komunikator - Czat");
-        frame.setContentPane(czatWindow);
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
+    public void setTxtRozmowaWOknieCzatu(String nadawca, String txtRozmowaWOknieCzatu) {
+        this.txtRozmowaWOknieCzatu.append(nadawca + ": " + txtRozmowaWOknieCzatu + "\n");
+    }
+
+    public void showCzatWindow() {
+        setTitle("Komunikator - Czat - " + odbiorca);
+        setContentPane(czatWindow);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        pack();
+        setLocationRelativeTo(null);
+        setVisible(true);
+
         txtWiadomosc.requestFocusInWindow();
         czatWindow.getRootPane().setDefaultButton(wyslijButton);
     }
