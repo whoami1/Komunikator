@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -20,7 +21,6 @@ public class KontaktyWindow extends JFrame {
     private JPanel kontaktyWindow;
     private JButton oAplikacjiButton;
     private JLabel lblUruchomionyUzytkownik;
-    private JButton odbierzButton;
     private JButton wylogujButton;
 
     private String mojNick;
@@ -28,6 +28,7 @@ public class KontaktyWindow extends JFrame {
 
     private Client client;
     private List<UserInfo> allUsers;
+    private HashMap<String,CzatWindow> odbiorcaDoCzatWindowMap = new HashMap<>();
 
     public KontaktyWindow(Client client, String mojNick, List<UserInfo> allUsers) {
         this.mojNick = mojNick;
@@ -36,7 +37,7 @@ public class KontaktyWindow extends JFrame {
 
         lblUruchomionyUzytkownik.setText("Konto użytkownika: " + mojNick);
 
-        new Thread(new CheckIfSthNewOnTheServerThread(client,mojNick)).start();
+        new Thread(new CheckIfSthNewOnTheServerThread(client,mojNick,odbiorcaDoCzatWindowMap)).start();
 
         wylogujButton.addActionListener(new ActionListener() {
             @Override
@@ -113,6 +114,7 @@ public class KontaktyWindow extends JFrame {
                     System.out.println("***************" + kontaktZListyUzytkownikow);
                     czatWindow = new CzatWindow(kontaktZListyUzytkownikow, client, mojNick);
                     czatWindow.showWindow();
+                    odbiorcaDoCzatWindowMap.put(kontaktZListyUzytkownikow,czatWindow);
                     //oknoCzatuZostaloOtwarte = true;
                 }
             }
