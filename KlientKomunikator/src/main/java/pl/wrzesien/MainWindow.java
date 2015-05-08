@@ -62,19 +62,12 @@ public class MainWindow extends JFrame {
 
         addWindowListener(new WindowAdapter() {
             @Override
-            public void windowClosing(WindowEvent e)
-            {
-                try
-                {
-                    if (client != null)
-                    {
-                        client.closeConnection();
-                        LOGGER.info("Połączenie z serwerem zostało zakończone...");
-                    }
-                } catch (Exception e1)
-                {
-                    e1.printStackTrace();
+            public void windowClosing(WindowEvent e) {
+                if (client != null) {
+                    client.closeConnection();
+                    LOGGER.info("Połączenie z serwerem zostało zakończone...");
                 }
+
             }
         });
     }

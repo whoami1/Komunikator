@@ -2,7 +2,6 @@ package pl.wrzesien;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pl.entities.response.MessageResponse;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -25,9 +24,7 @@ public class KontaktyWindow extends JFrame {
     private JButton wylogujButton;
 
     private String mojNick;
-    private String nadawcaZMessageResponse = null;
     private CzatWindow czatWindow;
-    private boolean oknoCzatuZostaloOtwarte = false;
 
     private Client client;
     private List<UserInfo> allUsers;
@@ -39,7 +36,7 @@ public class KontaktyWindow extends JFrame {
 
         lblUruchomionyUzytkownik.setText("Konto użytkownika: " + mojNick);
 
-        //new Thread(new CheckIfSthNewOnTheServerThread(this)).start();
+        new Thread(new CheckIfSthNewOnTheServerThread(client,mojNick)).start();
 
         wylogujButton.addActionListener(new ActionListener() {
             @Override
@@ -69,13 +66,6 @@ public class KontaktyWindow extends JFrame {
             }
         });
 
-        odbierzButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                przyciskOdbierz();
-            }
-        });
-
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -85,29 +75,6 @@ public class KontaktyWindow extends JFrame {
                 }
             }
         });
-    }
-
-    public void przyciskOdbierz() {
-        List<MessageResponse> messageResponses = client.odebranieWiadomosciZSerwera();
-
-        if (!messageResponses.isEmpty()) {
-            MessageResponse userNick = messageResponses.get(0);
-            nadawcaZMessageResponse = userNick.getUserInfo();
-
-            if (oknoCzatuZostaloOtwarte == false) {
-                czatWindow = new CzatWindow(nadawcaZMessageResponse, client, mojNick);
-                czatWindow.showCzatWindow();
-                oknoCzatuZostaloOtwarte = true;
-            }
-
-            if (oknoCzatuZostaloOtwarte == true) {
-                for (int i = 0; i < messageResponses.size(); i++) {
-                    MessageResponse messageResponse = messageResponses.get(i);
-                    nadawcaZMessageResponse = messageResponse.getUserInfo();
-                    czatWindow.setTxtRozmowaWOknieCzatu(nadawcaZMessageResponse, messageResponse.getMessage());
-                }
-            }
-        }
     }
 
     private void createUIComponents() {
@@ -145,8 +112,8 @@ public class KontaktyWindow extends JFrame {
                     String kontaktZListyUzytkownikow = (String) uzytkownicy.getValueAt(uzytkownicy.getSelectedRow(), 0);
                     System.out.println("***************" + kontaktZListyUzytkownikow);
                     czatWindow = new CzatWindow(kontaktZListyUzytkownikow, client, mojNick);
-                    czatWindow.showCzatWindow();
-                    oknoCzatuZostaloOtwarte = true;
+                    czatWindow.showWindow();
+                    //oknoCzatuZostaloOtwarte = true;
                 }
             }
         });

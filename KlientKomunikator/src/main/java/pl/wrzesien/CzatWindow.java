@@ -41,7 +41,7 @@ public class CzatWindow extends JFrame {
         this.txtRozmowaWOknieCzatu.append(nadawca + ": " + txtRozmowaWOknieCzatu + "\n");
     }
 
-    public void showCzatWindow() {
+    public void showWindow() {
         setTitle("Komunikator - Czat - " + odbiorca);
         setContentPane(czatWindow);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);

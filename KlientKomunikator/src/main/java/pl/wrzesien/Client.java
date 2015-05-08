@@ -128,7 +128,10 @@ public class Client {
             }
         }
         try {
-            client.close();
+            if (client != null)
+            {
+                client.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

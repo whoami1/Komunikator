@@ -2,68 +2,46 @@ package pl.wrzesien;
 
 import pl.entities.response.MessageResponse;
 
-import javax.swing.*;
-import java.awt.*;
-import java.text.DateFormat;
-import java.util.*;
 import java.util.List;
 
 /**
  * Created by Micha³ Wrzesieñ on 2015-05-06.
  */
 public class CheckIfSthNewOnTheServerThread implements Runnable {
-    // w¹tek
-    private Thread watek;
-    private boolean looped;
     private KontaktyWindow kontaktyWindow;
     // liczba milisekund pauzy (1000 ms czyli 1 sekunda)
-    private int pauza = 1000;
+    public static final int PAUZA_MS = 1000;
+    private Client client;
+    private String myNickname;
 
     // konstruktor klasy
-    public CheckIfSthNewOnTheServerThread(KontaktyWindow kontaktyWindow) {
-        this.kontaktyWindow = kontaktyWindow;
-        start();
+    public CheckIfSthNewOnTheServerThread(Client client, String myNickname) {
+        this.client = client;
+        this.myNickname = myNickname;
     }
 
-    // metoda start tworzy i uruchamia w¹tek zegara
-    public void start() {
-        // jeœli nie ma dzia³aj¹cego w¹tka, utwórz i uruchom nowy
-        if (watek == null) {
-            looped = true;
-            watek = new Thread(this);
-            watek.start();
+    public void odbierzWiadomosc() {
+        List<MessageResponse> messageResponses = client.odebranieWiadomosciZSerwera();
+
+        for (MessageResponse messageResponse : messageResponses) {
+            String odbiorca = messageResponse.getUserInfo();
+            CzatWindow czatWindow = new CzatWindow(odbiorca,client,myNickname);
+            czatWindow.showWindow();
+            czatWindow.setTxtRozmowaWOknieCzatu(odbiorca, messageResponse.getMessage());
         }
     }
 
     // metoda wywo³ana po starcie w¹tku
     public void run() {
         // dopóki zmienna watek wskazuje na bie¿¹cy w¹tek
-        while (looped) {
-            kontaktyWindow.przyciskOdbierz();
+        while (true) {
+            odbierzWiadomosc();
             try {
                 // wstrzymujemy dzia³anie w¹tku na 1 sekundê
-                watek.sleep(pauza);
+                Thread.sleep(PAUZA_MS);
             } catch (InterruptedException e) {
                 break;
             }
         }
-    }
-
-    // metoda zatrzymuj¹ca w¹tek
-    public void stop() {
-        if (watek == null) {
-            return;
-        }
-
-        looped = false;
-
-        // ustawiamy referencjê watek na null
-        watek.interrupt();
-        try {
-            watek.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        watek = null;
     }
 }
