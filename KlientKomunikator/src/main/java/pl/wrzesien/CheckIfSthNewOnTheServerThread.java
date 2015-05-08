@@ -42,11 +42,17 @@ public class CheckIfSthNewOnTheServerThread implements Runnable {
         }
     }
 
+    public void aktualizujStatusUzytkownikow()
+    {
+        client.listaWszystkichUzytkownikowRequest();
+    }
+
     // metoda wywo³ana po starcie w¹tku
     public void run() {
         // dopóki zmienna watek wskazuje na bie¿¹cy w¹tek
         while (true) {
             odbierzWiadomosc();
+            aktualizujStatusUzytkownikow();
             try {
                 // wstrzymujemy dzia³anie w¹tku na 1 sekundê
                 Thread.sleep(PAUZA_MS);

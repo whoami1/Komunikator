@@ -2,10 +2,7 @@ package pl.wrzesien;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pl.entities.request.AllMesageRequest;
-import pl.entities.request.LoginRequest;
-import pl.entities.request.SendMessageRequest;
-import pl.entities.request.RegisterRequest;
+import pl.entities.request.*;
 import pl.entities.response.*;
 
 import java.io.IOException;
@@ -32,6 +29,16 @@ public class SocketThread implements Runnable {
 
     public String log(String text) {
         return "|" + "Port: " + socket.getPort() + "|" + text;
+    }
+
+    public List<UserInfo> allUsers()
+    {
+        Collection<Communication> communications = allUsersToCommunicationMap.values();
+        List<UserInfo> userInfoList = new ArrayList<>();
+        for (Communication c : communications) {
+            userInfoList.add(c.getUserInfo());
+        }
+        return userInfoList;
     }
 
     @Override
@@ -62,12 +69,7 @@ public class SocketThread implements Runnable {
 
                         oos.writeObject(new LoginResponse(success));
 
-                        Collection<Communication> communications = allUsersToCommunicationMap.values();
-                        List<UserInfo> userInfoList = new ArrayList<>();
-                        for (Communication c : communications) {
-                            userInfoList.add(c.getUserInfo());
-                        }
-                        oos.writeObject(new AllUsersListResponse(userInfoList));
+                        oos.writeObject(new AllUsersListResponse(allUsers()));
 
                         LOGGER.info(log("Zalogowano uzytkownika: " + loginRequest.getLogin()));
                     } else {
@@ -100,6 +102,11 @@ public class SocketThread implements Runnable {
                     List<MessageResponse> listOfMessageResponse = communication.getListOfMessageResponse();
                     oos.writeObject(new AllMessageResponse(listOfMessageResponse));
                     communication.setListOfMessageResponse(new ArrayList<>());
+                } else if (obj instanceof AllUsersListRequest)
+                {
+                    List<UserInfo> userInfos = allUsers();
+                    oos.writeObject(new AllUsersListResponse(userInfos));
+                    LOGGER.info(userInfos.toString());
                 }
             }
         } catch (Exception e) {

@@ -2,10 +2,7 @@ package pl.wrzesien;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pl.entities.request.AllMesageRequest;
-import pl.entities.request.LoginRequest;
-import pl.entities.request.SendMessageRequest;
-import pl.entities.request.RegisterRequest;
+import pl.entities.request.*;
 import pl.entities.response.*;
 
 import java.io.*;
@@ -86,6 +83,19 @@ public class Client {
             AllMessageResponse allMessageResponse = (AllMessageResponse) read();
             LOGGER.info(allMessageResponse.toString());
             return allMessageResponse.getMessageResponseList();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
+    public List<UserInfo> listaWszystkichUzytkownikowRequest()
+    {
+        try {
+            out.writeObject(new AllUsersListRequest());
+            AllUsersListResponse allUsersListResponse = (AllUsersListResponse) read();
+            LOGGER.info(allUsersListResponse.toString());
+            return allUsersListResponse.getAllUsersList();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -28,12 +28,13 @@ public class KontaktyWindow extends JFrame {
 
     private Client client;
     private List<UserInfo> allUsers;
-    private HashMap<String,CzatWindow> odbiorcaDoCzatWindowMap = new HashMap<>();
+    private HashMap<String,CzatWindow> odbiorcaDoCzatWindowMap;
 
     public KontaktyWindow(Client client, String mojNick, List<UserInfo> allUsers) {
         this.mojNick = mojNick;
         this.client = client;
         this.allUsers = allUsers;
+        odbiorcaDoCzatWindowMap = new HashMap<>();
 
         lblUruchomionyUzytkownik.setText("Konto użytkownika: " + mojNick);
 
