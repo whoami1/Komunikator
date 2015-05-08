@@ -25,7 +25,7 @@ public class KontaktyWindow extends JFrame {
     private JButton wylogujButton;
 
     private String mojNick;
-    private String nadawca = null;
+    private String nadawcaZMessageResponse = null;
     private CzatWindow czatWindow;
     private boolean oknoCzatuZostaloOtwarte = false;
 
@@ -49,6 +49,9 @@ public class KontaktyWindow extends JFrame {
                     LOGGER.info("Połączenie z serwerem zostało zakończone, użytkownik: " + "*" + mojNick + "*" + " wylogował się...");
                 }
                 closeKontaktyWindow();
+                if (czatWindow != null) {
+                    czatWindow.closeCzatWindow();
+                }
                 MainWindow mainWindow = new MainWindow();
                 mainWindow.showMainWindow();
             }
@@ -89,10 +92,10 @@ public class KontaktyWindow extends JFrame {
 
         if (!messageResponses.isEmpty()) {
             MessageResponse userNick = messageResponses.get(0);
-            nadawca = userNick.getUserInfo();
+            nadawcaZMessageResponse = userNick.getUserInfo();
 
             if (oknoCzatuZostaloOtwarte == false) {
-                czatWindow = new CzatWindow(nadawca, client, mojNick);
+                czatWindow = new CzatWindow(nadawcaZMessageResponse, client, mojNick);
                 czatWindow.showCzatWindow();
                 oknoCzatuZostaloOtwarte = true;
             }
@@ -100,8 +103,8 @@ public class KontaktyWindow extends JFrame {
             if (oknoCzatuZostaloOtwarte == true) {
                 for (int i = 0; i < messageResponses.size(); i++) {
                     MessageResponse messageResponse = messageResponses.get(i);
-                    nadawca = messageResponse.getUserInfo();
-                    czatWindow.setTxtRozmowaWOknieCzatu(nadawca, messageResponse.getMessage());
+                    nadawcaZMessageResponse = messageResponse.getUserInfo();
+                    czatWindow.setTxtRozmowaWOknieCzatu(nadawcaZMessageResponse, messageResponse.getMessage());
                 }
             }
         }

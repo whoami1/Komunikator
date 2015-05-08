@@ -85,9 +85,7 @@ public class Client {
             out.writeObject(new AllMesageRequest());
             AllMessageResponse allMessageResponse = (AllMessageResponse) read();
             LOGGER.info(allMessageResponse.toString());
-            List<MessageResponse> messageResponseList = allMessageResponse.getMessageResponseList();
-            messageResponseList.toString();
-            return messageResponseList;
+            return allMessageResponse.getMessageResponseList();
         } catch (IOException e) {
             e.printStackTrace();
         }

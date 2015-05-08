@@ -40,6 +40,12 @@ public class CheckIfSthNewOnTheServerThread implements Runnable {
         // dopóki zmienna watek wskazuje na bie¿¹cy w¹tek
         while (looped) {
             kontaktyWindow.przyciskOdbierz();
+            try {
+                // wstrzymujemy dzia³anie w¹tku na 1 sekundê
+                watek.sleep(pauza);
+            } catch (InterruptedException e) {
+                break;
+            }
         }
     }
 

@@ -52,4 +52,9 @@ public class CzatWindow extends JFrame {
         txtWiadomosc.requestFocusInWindow();
         czatWindow.getRootPane().setDefaultButton(wyslijButton);
     }
+
+    public void closeCzatWindow() {
+        this.setVisible(false);
+        this.dispose();
+    }
 }
