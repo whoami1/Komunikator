@@ -19,9 +19,11 @@ public class Client {
     private Socket client;
     private ObjectOutputStream out;
     private ObjectInputStream in;
+    public boolean disconnected;
 
 
     public Client() {
+        disconnected = false;
     }
 
     public String log(String text) {
@@ -31,9 +33,19 @@ public class Client {
     private Object read() {
         Object obj;
         try {
+            //List<Object> ret = new ArrayList<>();
+
+
             while ((obj = in.readObject()) != null) {
                 return obj;
+                /*if(obj instanceof AllUsersListResponse)
+                {
+                    ret.add(obj);
+                }
+                else
+                    return obj;*/
             }
+            //return ret;
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -145,5 +157,6 @@ public class Client {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        disconnected = true;
     }
 }

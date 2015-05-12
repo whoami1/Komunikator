@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.IOException;
 
 /**
  * Created by Michał Wrzesień on 2015-03-08.
@@ -26,7 +25,6 @@ public class MainWindow extends JFrame {
     private Client client = null;
 
     public MainWindow() {
-        //Client client = new Client();
         logowanieButton.setEnabled(false);
         rejestracjaButton.setEnabled(false);
 
@@ -92,7 +90,7 @@ public class MainWindow extends JFrame {
         rejestracjaWindow.showRejestracjaWindow();
     }
 
-    public void showMainWindow() {
+    public void showWindow() {
         setTitle("Komunikator");
         setContentPane(mainWindow);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -110,7 +108,7 @@ public class MainWindow extends JFrame {
 
     public static void main(String[] args) {
         pl.wrzesien.MainWindow mainWindow = new MainWindow();
-        mainWindow.showMainWindow();
+        mainWindow.showWindow();
     }
 }
 

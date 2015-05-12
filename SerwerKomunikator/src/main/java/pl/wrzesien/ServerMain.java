@@ -14,10 +14,11 @@ import java.util.Map;
 public class ServerMain extends Thread {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ServerMain.class);
+    public static final int SOCKET_PORT = 6066;
+
     private ServerSocket serverSocket;
     private UserService userService = new UserService();
 
-    //private Map<UserInfo, Communication> userSocketMap = new HashMap<>();
     private Map<String, Communication> allUsersToCommunicationMap = new HashMap<>();
 
     public ServerMain(int port) throws IOException {
@@ -38,9 +39,10 @@ public class ServerMain extends Thread {
 
     public void run() {
         while (true) {
+            LOGGER.info(log("Oczekiwanie na klienta na porcie " + serverSocket.getLocalPort() + "..."));
             try {
-                LOGGER.info(log("Oczekiwanie na klienta na porcie " + serverSocket.getLocalPort() + "..."));
                 Socket server = serverSocket.accept();//nowy watek + przeslanie do niego tego socketa + kontynuacja petli
+                LOGGER.info(log("Polaczenie z klientem na porcie: " + serverSocket.getLocalPort() + " zostalo zrealizowane..."));
                 new Thread(new SocketThread(allUsersToCommunicationMap, server, userService)).start();
             } catch (SocketTimeoutException s) {
                 LOGGER.info(log("Limit czasu socketu zostal przekroczony!"));
@@ -53,9 +55,9 @@ public class ServerMain extends Thread {
     }
 
     public static void main(String[] args) {
-        int port = 6066;
+        //int port = 6066;
         try {
-            Thread t = new ServerMain(port);
+            Thread t = new ServerMain(SOCKET_PORT);
             t.start();
         } catch (IOException e) {
             e.printStackTrace();

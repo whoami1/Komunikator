@@ -78,7 +78,7 @@ public class UserService {
         List<Query> result = session.createQuery("FROM User WHERE userNick='" + login + "'").list();
         session.getTransaction().commit();
         if (result.size() == 1) //jeśli znajdzie to true, to znaczy, że taki użytkownik już istnieje
-            return true;
+        return true;
         else
             return false;
     }

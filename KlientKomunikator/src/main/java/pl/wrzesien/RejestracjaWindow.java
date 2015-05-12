@@ -33,7 +33,7 @@ public class RejestracjaWindow extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 closeRejestracjaWindow();
-                mainWindow.showMainWindow();
+                mainWindow.showWindow();
             }
         });
 

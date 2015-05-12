@@ -32,8 +32,7 @@ public class LogowanieWindow extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 closeLogowanieWindow();
-                //MainWindow mainWindow = new MainWindow();
-                mainWindow.showMainWindow();
+                mainWindow.showWindow();
             }
         });
 

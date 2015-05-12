@@ -50,7 +50,7 @@ public class CheckIfSthNewOnTheServerThread implements Runnable {
     // metoda wywo³ana po starcie w¹tku
     public void run() {
         // dopóki zmienna watek wskazuje na bie¿¹cy w¹tek
-        while (true) {
+        while (!client.disconnected) {
             odbierzWiadomosc();
             aktualizujStatusUzytkownikow();
             try {

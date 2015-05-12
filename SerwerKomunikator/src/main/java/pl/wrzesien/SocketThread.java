@@ -82,15 +82,17 @@ public class SocketThread implements Runnable {
                     boolean succes = userService.checkIfLoginExists(registerRequest.getLogin());
 
                     if (succes) {
+
+                        oos.writeObject(new RegistrationResponse(succes));
+                        LOGGER.info(log("Uzytkownik o podanym loginie: " + registerRequest.getLogin() + " juz istnieje - rozlaczam z " + socket.getRemoteSocketAddress()));
+                    } else {
                         UserInfo userInfo = new UserInfo(registerRequest.getLogin(), false);
                         Communication communication = new Communication(new ArrayList<>(), userInfo);
                         allUsersToCommunicationMap.put(registerRequest.getLogin(), communication);
                         oos.writeObject(new RegistrationResponse(succes));
-                        LOGGER.info(log("Uzytkownik o podanym loginie: " + registerRequest.getLogin() + " juz istnieje - rozlaczam z " + socket.getRemoteSocketAddress()));
-                    } else {
-                        oos.writeObject(new RegistrationResponse(succes));
                         userService.newUser(registerRequest.getLogin(), registerRequest.getPassword());
                         LOGGER.info(log("Zarejestrowano uzytkownika o loginie: " + registerRequest.getLogin() + " - rozlaczam z " + socket.getRemoteSocketAddress()));
+                        //przeladowanie listy uzytkownikow z bazy
                     }
                 } else if (obj instanceof SendMessageRequest) {
                     LOGGER.info(allUsersToCommunicationMap.toString());

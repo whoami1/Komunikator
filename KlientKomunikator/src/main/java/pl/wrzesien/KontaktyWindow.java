@@ -25,6 +25,7 @@ public class KontaktyWindow extends JFrame {
 
     private String mojNick;
     private CzatWindow czatWindow;
+    private HistoriaWindow historiaWindow;
 
     private Client client;
     private List<UserInfo> allUsers;
@@ -47,12 +48,14 @@ public class KontaktyWindow extends JFrame {
                     client.closeConnection();
                     LOGGER.info("Połączenie z serwerem zostało zakończone, użytkownik: " + "*" + mojNick + "*" + " wylogował się...");
                 }
-                closeKontaktyWindow();
+                closeWindow();
                 if (czatWindow != null) {
-                    czatWindow.closeCzatWindow();
+                    czatWindow.closeWindow();
+                } else if (historiaWindow != null) {
+                    historiaWindow.closeWindow();
                 }
                 MainWindow mainWindow = new MainWindow();
-                mainWindow.showMainWindow();
+                mainWindow.showWindow();
             }
         });
 
@@ -65,6 +68,14 @@ public class KontaktyWindow extends JFrame {
         dodajKontaktButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 DodajKontaktDialog.openDodajKontaktyDialog();
+            }
+        });
+
+        historiaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                historiaWindow = new HistoriaWindow();
+                historiaWindow.showWindow();
             }
         });
 
@@ -103,8 +114,6 @@ public class KontaktyWindow extends JFrame {
         };
 
         uzytkownicy.setRowSelectionAllowed(true);
-
-        // uzytkownicy.setFocusable(false);
         uzytkownicy.setFillsViewportHeight(true);
         uzytkownicy.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         uzytkownicy.addMouseListener(new MouseAdapter() {
@@ -116,7 +125,6 @@ public class KontaktyWindow extends JFrame {
                     czatWindow = new CzatWindow(kontaktZListyUzytkownikow, client, mojNick);
                     czatWindow.showWindow();
                     odbiorcaDoCzatWindowMap.put(kontaktZListyUzytkownikow,czatWindow);
-                    //oknoCzatuZostaloOtwarte = true;
                 }
             }
         });
@@ -124,7 +132,6 @@ public class KontaktyWindow extends JFrame {
 
     public void showKontaktyWindow() {
         setTitle("Komunikator - Kontakty");
-        //JPanel kontaktyWindow = new KontaktyWindow(client, mojNick, allUsers).kontaktyWindow;
         setContentPane(kontaktyWindow);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         pack();
@@ -132,7 +139,7 @@ public class KontaktyWindow extends JFrame {
         setVisible(true);
     }
 
-    public void closeKontaktyWindow() {
+    public void closeWindow() {
         this.setVisible(false);
         this.dispose();
     }

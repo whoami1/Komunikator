@@ -8,6 +8,14 @@
         </encoder>
     </appender>
 
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>logi\\KlientKomunikator.log</file>
+        <append>true</append>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%date %level [%thread] %logger{10} [%file:%line] %msg%n</pattern>
+        </encoder>
+    </appender>
+
     <logger name="pl.logback" level="INFO" additivity="false">
         <appender-ref ref="STDOUT" />
     </logger>
@@ -15,5 +23,6 @@
     <!-- By default, the level of the root level is set to DEBUG -->
     <root level="DEBUG">
         <appender-ref ref="STDOUT" />
+        <appender-ref ref="FILE" />
     </root>
 </configuration>
