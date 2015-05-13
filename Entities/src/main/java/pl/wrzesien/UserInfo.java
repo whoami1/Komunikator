@@ -2,14 +2,7 @@ package pl.wrzesien;
 
 import java.io.Serializable;
 
-/**
- * Created by Michał Wrzesień on 2015-03-28.
- */
-
 public class UserInfo implements Serializable {
-    private static final long serialVersionUID = 1;
-
-
     private String userNick;
     private boolean userStatus;
 
@@ -37,5 +30,24 @@ public class UserInfo implements Serializable {
                 "userNick='" + userNick + '\'' +
                 ", userStatus=" + userStatus +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UserInfo userInfo = (UserInfo) o;
+
+        if (userStatus != userInfo.userStatus) return false;
+        return !(userNick != null ? !userNick.equals(userInfo.userNick) : userInfo.userNick != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = userNick != null ? userNick.hashCode() : 0;
+        result = 31 * result + (userStatus ? 1 : 0);
+        return result;
     }
 }

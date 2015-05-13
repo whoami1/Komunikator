@@ -10,6 +10,7 @@ import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ServerMain extends Thread {
 
@@ -19,7 +20,7 @@ public class ServerMain extends Thread {
     private ServerSocket serverSocket;
     private UserService userService = new UserService();
 
-    private Map<String, Communication> allUsersToCommunicationMap = new HashMap<>();
+    private Map<String, Communication> allUsersToCommunicationMap = new ConcurrentHashMap<>();
 
     public ServerMain(int port) throws IOException {
         serverSocket = new ServerSocket(port);

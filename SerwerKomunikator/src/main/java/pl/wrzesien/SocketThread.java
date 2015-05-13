@@ -17,7 +17,7 @@ import java.util.Map;
 public class SocketThread implements Runnable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SocketThread.class);
-    private Map<String, Communication> allUsersToCommunicationMap;
+    private volatile Map<String, Communication> allUsersToCommunicationMap;
     private Socket socket;
     private UserService userService;
 
@@ -31,8 +31,7 @@ public class SocketThread implements Runnable {
         return "|" + "Port: " + socket.getPort() + "|" + text;
     }
 
-    public List<UserInfo> allUsers()
-    {
+    public List<UserInfo> allUsers() {
         Collection<Communication> communications = allUsersToCommunicationMap.values();
         List<UserInfo> userInfoList = new ArrayList<>();
         for (Communication c : communications) {
@@ -63,13 +62,10 @@ public class SocketThread implements Runnable {
                     if (success) {
                         username = loginRequest.getLogin();
                         Communication communication = allUsersToCommunicationMap.get(username);
-
-                        UserInfo userStatus = communication.getUserInfo();
-                        userStatus.setUserStatus(true);
+                        Communication communicationNew = new Communication(communication.getListOfMessageResponse(), new UserInfo(communication.getUserInfo().getUserNick(), true));
+                        allUsersToCommunicationMap.put(username, communicationNew);
 
                         oos.writeObject(new LoginResponse(success));
-
-                        oos.writeObject(new AllUsersListResponse(allUsers()));
 
                         LOGGER.info(log("Zalogowano uzytkownika: " + loginRequest.getLogin()));
                     } else {
@@ -104,8 +100,7 @@ public class SocketThread implements Runnable {
                     List<MessageResponse> listOfMessageResponse = communication.getListOfMessageResponse();
                     oos.writeObject(new AllMessageResponse(listOfMessageResponse));
                     communication.setListOfMessageResponse(new ArrayList<>());
-                } else if (obj instanceof AllUsersListRequest)
-                {
+                } else if (obj instanceof AllUsersListRequest) {
                     List<UserInfo> userInfos = allUsers();
                     oos.writeObject(new AllUsersListResponse(userInfos));
                     LOGGER.info(userInfos.toString());
@@ -135,7 +130,7 @@ public class SocketThread implements Runnable {
             }
             if (username != null) {
                 Communication userDisconnected = allUsersToCommunicationMap.get(username);
-                LOGGER.info("Uzytkownik: " + "*" +  username + "*" + " rozlaczyl sie");
+                LOGGER.info("Uzytkownik: " + "*" + username + "*" + " rozlaczyl sie");
 
                 UserInfo userStatus = userDisconnected.getUserInfo();
                 userStatus.setUserStatus(false);

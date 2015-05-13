@@ -54,11 +54,6 @@ public class Client {
         return null;
     }
 
-    public List<UserInfo> listaWszystkichUzytkownikow() {
-        AllUsersListResponse allUsersListResponse = (AllUsersListResponse) read();
-        return allUsersListResponse.getAllUsersList();
-    }
-
     public boolean login(String userLogin, String userPassword) {
         try {
             out.writeObject(new LoginRequest(userLogin, userPassword));

@@ -8,7 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by Michał Wrzesień on 2015-03-10.
@@ -66,11 +66,7 @@ public class LogowanieWindow extends JFrame {
 
     private void logIn() {
         if (client.login(getLogin(), getHaslo())) {
-            List<UserInfo> allUsers = client.listaWszystkichUzytkownikow();
-            LOGGER.info("Zalogowano uzytkownika: " + getLogin());
-            LOGGER.info("Zarejestrowani uzytkownicy: " + allUsers.toString());
-
-            KontaktyWindow kontaktyWindow = new KontaktyWindow(client, getLogin(), allUsers);
+            KontaktyWindow kontaktyWindow = new KontaktyWindow(client, getLogin(), new ArrayList<>());
             kontaktyWindow.showKontaktyWindow();
             closeLogowanieWindow();
         } else {
@@ -97,8 +93,7 @@ public class LogowanieWindow extends JFrame {
         getRootPane().setDefaultButton(zalogujButton);
     }
 
-    public void closeLogowanieWindow()
-    {
+    public void closeLogowanieWindow() {
         this.setVisible(false);
         this.dispose();
     }
