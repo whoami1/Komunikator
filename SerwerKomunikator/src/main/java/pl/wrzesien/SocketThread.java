@@ -132,8 +132,9 @@ public class SocketThread implements Runnable {
                 Communication userDisconnected = allUsersToCommunicationMap.get(username);
                 LOGGER.info("Uzytkownik: " + "*" + username + "*" + " rozlaczyl sie");
 
-                UserInfo userStatus = userDisconnected.getUserInfo();
-                userStatus.setUserStatus(false);
+                Communication communication = allUsersToCommunicationMap.get(username);
+                Communication communicationNew = new Communication(communication.getListOfMessageResponse(), new UserInfo(communication.getUserInfo().getUserNick(), false));
+                allUsersToCommunicationMap.put(username, communicationNew);
             }
         }
     }
