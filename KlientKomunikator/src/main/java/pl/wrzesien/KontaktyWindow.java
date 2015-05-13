@@ -4,7 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableColumnModel;
+import javax.swing.table.TableColumn;
 import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -40,11 +43,15 @@ public class KontaktyWindow extends JFrame {
         lblUruchomionyUzytkownik.setText("Konto użytkownika: " + mojNick);
 
         CheckIfSthNewOnTheServerThread checkThread = new CheckIfSthNewOnTheServerThread(client, mojNick, odbiorcaDoCzatWindowMap);
-        checkThread.addUserListListener(new UserListListner {
-            void onUserList (List < UserInfo > userList) {
-                //śuzytkownicy ustawia userList;
+        UserListListner userListListner = new UserListListner() {
+            @Override
+            public void onUserList(List<UserInfo> userList) {
+                uzytkownicy.setModel(new UserListTableModel(userList));
             }
-        });
+        };
+
+        checkThread.addUserListListener(userListListner);
+
         new Thread(checkThread).start();
 
         wylogujButton.addActionListener(new ActionListener() {
@@ -57,7 +64,8 @@ public class KontaktyWindow extends JFrame {
                 closeWindow();
                 if (czatWindow != null) {
                     czatWindow.closeWindow();
-                } else if (historiaWindow != null) {
+                }
+                if (historiaWindow != null) {
                     historiaWindow.closeWindow();
                 }
                 MainWindow mainWindow = new MainWindow();
@@ -97,23 +105,7 @@ public class KontaktyWindow extends JFrame {
     }
 
     private void createUIComponents() {
-
-        String columnNames[] = new String[]{"Nick", "Status"};
-
-        Object[][] data = new Object[allUsers.size()][2];
-        for (int i = 0; i < allUsers.size(); i++) {
-            data[i][0] = allUsers.get(i).getUserNick();
-            data[i][1] = allUsers.get(i).getUserStatus();
-
-            //Podmiana statusu z boolean na tekstowy
-            if (data[i][1].equals(true)) {
-                data[i][1] = "dostępny";
-            } else {
-                data[i][1] = "niedostępny";
-            }
-        }
-
-        uzytkownicy = new JTable(data, columnNames) {
+        uzytkownicy = new JTable(new UserListTableModel(new ArrayList<>())) {
             public boolean isCellEditable(int data, int columnNames) {
                 return false;
             } //zablokowanie edycji komorek tabeli
@@ -130,7 +122,14 @@ public class KontaktyWindow extends JFrame {
                     System.out.println("***************" + kontaktZListyUzytkownikow);
                     czatWindow = new CzatWindow(kontaktZListyUzytkownikow, client, mojNick);
                     czatWindow.showWindow();
-                    odbiorcaDoCzatWindowMap.put(kontaktZListyUzytkownikow,czatWindow);
+                    odbiorcaDoCzatWindowMap.put(kontaktZListyUzytkownikow, czatWindow);
+
+                    czatWindow.addWindowListener(new WindowAdapter() {
+                        @Override
+                        public void windowClosed(WindowEvent e) {
+                            odbiorcaDoCzatWindowMap.remove(kontaktZListyUzytkownikow);
+                        }
+                    });
                 }
             }
         });

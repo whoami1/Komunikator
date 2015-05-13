@@ -2,7 +2,6 @@ package pl.wrzesien;
 
 import pl.entities.response.MessageResponse;
 
-import java.net.Socket;
 import java.util.List;
 
 /**

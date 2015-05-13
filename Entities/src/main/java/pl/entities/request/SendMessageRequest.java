@@ -6,8 +6,6 @@ import java.io.Serializable;
  * Created by Micha³ Wrzesieñ on 2015-04-16.
  */
 public class SendMessageRequest implements Serializable {
-    private static final long serialVersionUID = 1;
-
     private String username;
     private String text;
 

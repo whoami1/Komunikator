@@ -9,8 +9,6 @@ import java.util.List;
  * Created by Micha³ Wrzesieñ on 2015-04-14.
  */
 public class UserListResponse implements Serializable {
-    private static final long serialVersionUID = 1;
-
     private List<UserInfo> userInfoList;
 
     public UserListResponse(List<UserInfo> userInfoList) {

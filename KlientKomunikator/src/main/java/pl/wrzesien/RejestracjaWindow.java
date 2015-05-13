@@ -93,8 +93,7 @@ public class RejestracjaWindow extends JFrame {
         getRootPane().setDefaultButton(zarejestrujButton);
     }
 
-    public void closeRejestracjaWindow()
-    {
+    public void closeRejestracjaWindow() {
         this.setVisible(false);
         this.dispose();
     }

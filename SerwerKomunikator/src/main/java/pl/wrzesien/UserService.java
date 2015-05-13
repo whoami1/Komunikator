@@ -3,7 +3,6 @@ package pl.wrzesien;
 import org.hibernate.Query;
 import org.hibernate.classic.Session;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,7 +10,6 @@ import java.util.List;
  */
 public class UserService {
     private Session session;
-    //private ArrayList<String> userList = new ArrayList<>();
 
     public UserService() {
         this.session = HibernateUtil.getSessionFactory().openSession();
@@ -52,7 +50,6 @@ public class UserService {
     public List<String> showAllUsers() {
         session.beginTransaction();
 
-        // poprawić, żeby tylko pobierany był userNick
         List<String> result = session.createQuery("SELECT userNick FROM User").list();
 
         session.getTransaction().commit();
@@ -78,7 +75,7 @@ public class UserService {
         List<Query> result = session.createQuery("FROM User WHERE userNick='" + login + "'").list();
         session.getTransaction().commit();
         if (result.size() == 1) //jeśli znajdzie to true, to znaczy, że taki użytkownik już istnieje
-        return true;
+            return true;
         else
             return false;
     }

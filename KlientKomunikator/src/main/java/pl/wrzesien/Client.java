@@ -21,7 +21,6 @@ public class Client {
     private ObjectInputStream in;
     public boolean disconnected;
 
-
     public Client() {
         disconnected = false;
     }
@@ -33,19 +32,9 @@ public class Client {
     private Object read() {
         Object obj;
         try {
-            //List<Object> ret = new ArrayList<>();
-
-
             while ((obj = in.readObject()) != null) {
                 return obj;
-                /*if(obj instanceof AllUsersListResponse)
-                {
-                    ret.add(obj);
-                }
-                else
-                    return obj;*/
             }
-            //return ret;
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -96,8 +85,7 @@ public class Client {
         return new ArrayList<>();
     }
 
-    public List<UserInfo> listaWszystkichUzytkownikowRequest()
-    {
+    public List<UserInfo> listaWszystkichUzytkownikowRequest() {
         try {
             out.writeObject(new AllUsersListRequest());
             AllUsersListResponse allUsersListResponse = (AllUsersListResponse) read();
@@ -109,14 +97,11 @@ public class Client {
         return new ArrayList<>();
     }
 
-    public boolean wyslaniePlikuNaSerwer(byte[] plik)
-    {
+    public boolean wyslaniePlikuNaSerwer(byte[] plik) {
         try {
             out.writeObject(new FileRequest(plik));
             return true;
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return false;
@@ -158,8 +143,7 @@ public class Client {
             }
         }
         try {
-            if (client != null)
-            {
+            if (client != null) {
                 client.close();
             }
         } catch (IOException e) {

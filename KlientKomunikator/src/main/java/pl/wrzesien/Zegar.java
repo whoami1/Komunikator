@@ -1,5 +1,8 @@
-package pl.wrzesien; /**
- * Created by Michał Wrzesień on 2015-03-24.
+package pl.wrzesien;
+
+/**
+ * @version 1.0 2015-03-24
+ * @author Michał Wrzesień
  */
 
 import javax.swing.*;
@@ -7,7 +10,9 @@ import java.awt.*;
 import java.text.DateFormat;
 import java.util.Date;
 
-// nowa klasa Zegar zbudowana w oparciu o klasę JLabel
+/**
+ * klasa Zegar zbudowana w oparciu o klasę JLabel implementująca interfejs Runnable
+ */
 public class Zegar extends JLabel implements Runnable {
     // wątek
     private Thread watek;

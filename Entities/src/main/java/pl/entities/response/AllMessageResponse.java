@@ -7,8 +7,6 @@ import java.util.List;
  * Created by Micha³ Wrzesieñ on 2015-04-21.
  */
 public class AllMessageResponse implements Serializable {
-    private static final long serialVersionUID = 1;
-
     private List<MessageResponse> messageResponseList;
 
     public AllMessageResponse(List<MessageResponse> messageResponseList) {

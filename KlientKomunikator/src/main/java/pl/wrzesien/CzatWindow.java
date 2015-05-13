@@ -1,7 +1,6 @@
 package pl.wrzesien;
 
 import org.apache.commons.io.FileUtils;
-import pl.entities.request.FileRequest;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -50,7 +49,6 @@ public class CzatWindow extends JFrame {
         wyslijPlikButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 chooser.setMultiSelectionEnabled(false);
                 Action details = chooser.getActionMap().get("viewTypeDetails");
                 details.actionPerformed(null);
@@ -63,10 +61,8 @@ public class CzatWindow extends JFrame {
 
                 try {
                     byte[] bytes = FileUtils.readFileToByteArray(plik);
-                    //FileRequest fileRequest = new FileRequest(bytes);
 
-                    if (returnVal == JFileChooser.APPROVE_OPTION)
-                    {
+                    if (returnVal == JFileChooser.APPROVE_OPTION) {
                         client.wyslaniePlikuNaSerwer(bytes);
                     }
                 } catch (IOException e1) {

@@ -22,8 +22,7 @@ public class HistoriaZapisOdczyt {
     public boolean czyFolderIstnieje(String path) {
         File f = new File(path);
 
-        if(!f.isDirectory())
-        {
+        if (!f.isDirectory()) {
             f.mkdir();
             return true;
         }

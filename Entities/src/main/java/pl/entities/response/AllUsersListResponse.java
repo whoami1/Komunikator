@@ -7,7 +7,6 @@ import java.util.List;
 
 
 public class AllUsersListResponse implements Serializable {
-
     private List<UserInfo> allUsersList;
 
     public AllUsersListResponse(List<UserInfo> allUsersList) {

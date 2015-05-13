@@ -33,9 +33,8 @@ public class HistoriaWindow extends JFrame {
 
             data = new Object[names.size()][2];
             for (int i = 0; i < names.size(); i++) {
-                if(names.get(i).contains("."))
-                {
-                    data[i][0] = names.get(i).substring(0,names.get(i).lastIndexOf('.'));
+                if (names.get(i).contains(".")) {
+                    data[i][0] = names.get(i).substring(0, names.get(i).lastIndexOf('.'));
                 }
             }
         } else {
