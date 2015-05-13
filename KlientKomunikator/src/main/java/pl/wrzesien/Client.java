@@ -109,6 +109,19 @@ public class Client {
         return new ArrayList<>();
     }
 
+    public boolean wyslaniePlikuNaSerwer(byte[] plik)
+    {
+        try {
+            out.writeObject(new FileRequest(plik));
+            return true;
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public boolean connect(String serverIp) {
 
         int port = 6066;

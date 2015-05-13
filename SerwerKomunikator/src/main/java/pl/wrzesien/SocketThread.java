@@ -104,6 +104,9 @@ public class SocketThread implements Runnable {
                     List<UserInfo> userInfos = allUsers();
                     oos.writeObject(new AllUsersListResponse(userInfos));
                     LOGGER.info(userInfos.toString());
+                } else if (obj instanceof FileRequest)
+                {
+                    //FileRequest
                 }
             }
         } catch (Exception e) {

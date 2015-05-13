@@ -1,10 +1,11 @@
 package pl.wrzesien;
 
+import org.apache.commons.io.FileUtils;
+import pl.entities.request.FileRequest;
+
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -50,7 +51,7 @@ public class CzatWindow extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                chooser.setMultiSelectionEnabled(true);
+                chooser.setMultiSelectionEnabled(false);
                 Action details = chooser.getActionMap().get("viewTypeDetails");
                 details.actionPerformed(null);
 
@@ -58,12 +59,24 @@ public class CzatWindow extends JFrame {
                 chooser.setFileFilter(filtr);
                 int returnVal = chooser.showOpenDialog(czatWindow);
 
-                File[] pliki = chooser.getSelectedFiles();
+                File plik = chooser.getSelectedFile();
 
-                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                try {
+                    byte[] bytes = FileUtils.readFileToByteArray(plik);
+                    //FileRequest fileRequest = new FileRequest(bytes);
+
+                    if (returnVal == JFileChooser.APPROVE_OPTION)
+                    {
+                        client.wyslaniePlikuNaSerwer(bytes);
+                    }
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+
+/*               if (returnVal == JFileChooser.APPROVE_OPTION) {
                     for (File plik : pliki)
                         System.out.println("Wybrano plik: " + plik.getName());
-                }
+                }*/
             }
         });
     }

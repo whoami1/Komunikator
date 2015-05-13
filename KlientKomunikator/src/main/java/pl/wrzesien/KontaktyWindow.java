@@ -124,7 +124,13 @@ public class KontaktyWindow extends JFrame {
                     System.out.println("***************" + kontaktZListyUzytkownikow);
                     czatWindow = new CzatWindow(kontaktZListyUzytkownikow, client, mojNick);
                     czatWindow.showWindow();
-                    odbiorcaDoCzatWindowMap.put(kontaktZListyUzytkownikow,czatWindow);
+                    odbiorcaDoCzatWindowMap.put(kontaktZListyUzytkownikow, czatWindow);
+                    czatWindow.addWindowListener(new WindowAdapter() {
+                        @Override
+                        public void windowClosed(WindowEvent e) {
+                            odbiorcaDoCzatWindowMap.remove(kontaktZListyUzytkownikow,czatWindow);
+                        }
+                    });
                 }
             }
         });
