@@ -29,7 +29,7 @@ public class KontaktyWindow extends JFrame {
 
     private Client client;
     private List<UserInfo> allUsers;
-    private HashMap<String,CzatWindow> odbiorcaDoCzatWindowMap;
+    private HashMap<String, CzatWindow> odbiorcaDoCzatWindowMap;
 
     public KontaktyWindow(Client client, String mojNick, List<UserInfo> allUsers) {
         this.mojNick = mojNick;
@@ -39,7 +39,13 @@ public class KontaktyWindow extends JFrame {
 
         lblUruchomionyUzytkownik.setText("Konto użytkownika: " + mojNick);
 
-        new Thread(new CheckIfSthNewOnTheServerThread(client,mojNick,odbiorcaDoCzatWindowMap)).start();
+        CheckIfSthNewOnTheServerThread checkThread = new CheckIfSthNewOnTheServerThread(client, mojNick, odbiorcaDoCzatWindowMap);
+        checkThread.addUserListListener(new UserListListner {
+            void onUserList (List < UserInfo > userList) {
+                //śuzytkownicy ustawia userList;
+            }
+        });
+        new Thread(checkThread).start();
 
         wylogujButton.addActionListener(new ActionListener() {
             @Override
@@ -124,13 +130,7 @@ public class KontaktyWindow extends JFrame {
                     System.out.println("***************" + kontaktZListyUzytkownikow);
                     czatWindow = new CzatWindow(kontaktZListyUzytkownikow, client, mojNick);
                     czatWindow.showWindow();
-                    odbiorcaDoCzatWindowMap.put(kontaktZListyUzytkownikow, czatWindow);
-                    czatWindow.addWindowListener(new WindowAdapter() {
-                        @Override
-                        public void windowClosed(WindowEvent e) {
-                            odbiorcaDoCzatWindowMap.remove(kontaktZListyUzytkownikow,czatWindow);
-                        }
-                    });
+                    odbiorcaDoCzatWindowMap.put(kontaktZListyUzytkownikow,czatWindow);
                 }
             }
         });
