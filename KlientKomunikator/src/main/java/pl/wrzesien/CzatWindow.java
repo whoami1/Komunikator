@@ -3,11 +3,16 @@ package pl.wrzesien;
 import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -20,17 +25,18 @@ public class CzatWindow extends JFrame {
     private JButton wyslijButton;
     private JLabel lblUruchomionyUzytkownik;
     private JButton wyslijPlikButton;
+    private JButton doladujOstatniaRozmowaButton;
     private String odbiorca;
     private Client client;
-    private String nadawca;
+    private String mojNick;
 
-    public CzatWindow(String odbiorca, Client client, String nadawca) {
+    public CzatWindow(String odbiorca, Client client, String mojNick) {
         this.client = client;
         this.odbiorca = odbiorca;
-        this.nadawca = nadawca;
+        this.mojNick = mojNick;
 
         txtRozmowaWOknieCzatu.setEditable(false);
-        lblUruchomionyUzytkownik.setText("Użytkownik: " + "\"" + nadawca + "\"" + " rozmowa z: " + "\"" + odbiorca + "\"");
+        lblUruchomionyUzytkownik.setText("Użytkownik: " + "\"" + mojNick + "\"" + " rozmowa z: " + "\"" + odbiorca + "\"");
 
         JFileChooser chooser = new JFileChooser();
         LokalizujNapisyPL(chooser);
@@ -38,9 +44,7 @@ public class CzatWindow extends JFrame {
         wyslijButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //txtRozmowaWOknieCzatu.append(userInfo.getUserNick()+ ": " + txtWiadomosc.getText() + "\n");
-                //txtRozmowaWOknieCzatu.append(nadawca + ": " + txtWiadomosc.getText() + "\n");
-                setTxtRozmowaWOknieCzatu(nadawca, txtWiadomosc.getText());
+                setTxtRozmowaWOknieCzatu(mojNick, txtWiadomosc.getText());
                 client.wyslanieWiadomosciNaSerwer(odbiorca, txtWiadomosc.getText());
                 txtWiadomosc.setText(null);
             }
@@ -64,6 +68,7 @@ public class CzatWindow extends JFrame {
 
                     if (returnVal == JFileChooser.APPROVE_OPTION) {
                         client.wyslaniePlikuNaSerwer(bytes);
+                        setTxtRozmowaWOknieCzatu(mojNick, "Wysłano następujący plik: " + plik.getName());
                     }
                 } catch (IOException e1) {
                     e1.printStackTrace();
@@ -75,12 +80,57 @@ public class CzatWindow extends JFrame {
                 }*/
             }
         });
+
+        doladujOstatniaRozmowaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser doladujHistorie = new JFileChooser("archiwum");
+                LokalizujNapisyPL(doladujHistorie);
+                doladujHistorie.setMultiSelectionEnabled(false);
+                Action details = doladujHistorie.getActionMap().get("viewTypeDetails");
+                details.actionPerformed(null);
+
+                doladujHistorie.setFileFilter(new FileFilter() {
+                    @Override
+                    public boolean accept(File f) {
+                        return (f.isDirectory() || f.getName().startsWith(odbiorca));
+                    }
+
+                    @Override
+                    public String getDescription() {
+                        return null;
+                    }
+                });
+
+                int returnVal = doladujHistorie.showOpenDialog(czatWindow);
+
+                HistoriaZapisOdczyt historiaZapisOdczyt = new HistoriaZapisOdczyt();
+
+                String name = doladujHistorie.getSelectedFile().getName();
+
+                try
+                {
+                    if (returnVal == JFileChooser.APPROVE_OPTION)
+                    {
+                        ArrayList<String> tekstRozmowyTablica = historiaZapisOdczyt.odczytPliku("archiwum" + "\\" + name);
+                        for (String tekstRozmowy : tekstRozmowyTablica)
+                        {
+                            txtRozmowaWOknieCzatu.append("*" + tekstRozmowy);
+                        }
+                    }
+                }
+                catch (IOException e1)
+                {
+                    e1.printStackTrace();
+                }
+            }
+        });
+
     }
 
     public void setTxtRozmowaWOknieCzatu(String nadawca, String txtRozmowaWOknieCzatu) {
         String rozmowa = nadawca + ": " + txtRozmowaWOknieCzatu + "\n";
         this.txtRozmowaWOknieCzatu.append(rozmowa);
-
         zapisHistoriiRozmowy(rozmowa);
     }
 

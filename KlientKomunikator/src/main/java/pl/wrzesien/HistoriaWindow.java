@@ -1,7 +1,9 @@
 package pl.wrzesien;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -13,6 +15,9 @@ import java.util.Arrays;
  * Created by Micha³ Wrzesieñ on 2015-05-09.
  */
 public class HistoriaWindow extends JFrame {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(pl.wrzesien.HistoriaWindow.class);
+
     private JPanel historiaWindow;
     private JTable tblArchiwum;
     private JTextArea txtTekstWiadomosciZArchiwum;
@@ -57,7 +62,7 @@ public class HistoriaWindow extends JFrame {
                     txtTekstWiadomosciZArchiwum.setText("");
                     String rozszerzenie = ".txt";
                     String nazwaPliku = (String) tblArchiwum.getValueAt(tblArchiwum.getSelectedRow(), 0);
-                    System.out.println("***************" + nazwaPliku);
+                    LOGGER.info("Uruchomiono plik: " + nazwaPliku);
 
                     HistoriaZapisOdczyt historiaZapisOdczyt = new HistoriaZapisOdczyt();
                     try {

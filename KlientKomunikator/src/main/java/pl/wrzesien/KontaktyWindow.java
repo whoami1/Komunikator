@@ -119,7 +119,7 @@ public class KontaktyWindow extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     String kontaktZListyUzytkownikow = (String) uzytkownicy.getValueAt(uzytkownicy.getSelectedRow(), 0);
-                    System.out.println("***************" + kontaktZListyUzytkownikow);
+                    LOGGER.info("Wybrany kontakt z listy użytkowników: " + kontaktZListyUzytkownikow);
                     czatWindow = new CzatWindow(kontaktZListyUzytkownikow, client, mojNick);
                     czatWindow.showWindow();
                     odbiorcaDoCzatWindowMap.put(kontaktZListyUzytkownikow, czatWindow);
