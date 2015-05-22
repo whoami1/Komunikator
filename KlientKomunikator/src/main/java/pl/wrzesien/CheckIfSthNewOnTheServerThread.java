@@ -1,7 +1,6 @@
 package pl.wrzesien;
 
 import pl.entities.response.Message;
-import pl.entities.response.MessageResponse;
 import pl.entities.response.TextMessage;
 
 import java.awt.event.WindowAdapter;
@@ -10,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by Micha³ Wrzesieñ on 2015-05-06.
+ * Created by Michaï¿½ Wrzesieï¿½ on 2015-05-06.
  */
 public class CheckIfSthNewOnTheServerThread implements Runnable {
     // liczba milisekund pauzy (1000 ms czyli 1 sekunda)
@@ -30,10 +29,9 @@ public class CheckIfSthNewOnTheServerThread implements Runnable {
     public void odbierzWiadomosc() {
         List<Message> messageResponses = client.odebranieWiadomosciZSerwera();
 
-        if (messageResponses instanceof TextMessage)
-        {
-            for (Message messageResponse : messageResponses)
-            {
+
+        for (Message messageResponse : messageResponses) {
+            if (messageResponse instanceof TextMessage) {
                 String odbiorca = messageResponse.getRecipiant();
                 CzatWindow czatWindow = null;
                 if (odbiorcaDoCzatWindowMap.get(odbiorca) == null) {
@@ -49,7 +47,7 @@ public class CheckIfSthNewOnTheServerThread implements Runnable {
                 } else {
                     czatWindow = odbiorcaDoCzatWindowMap.get(odbiorca);
                 }
-                czatWindow.setTxtRozmowaWOknieCzatu(odbiorca, ((TextMessage)messageResponse).getTextMessage());
+                czatWindow.setTxtRozmowaWOknieCzatu(odbiorca, ((TextMessage) messageResponse).getTextMessage());
             }
         }
 
@@ -64,14 +62,14 @@ public class CheckIfSthNewOnTheServerThread implements Runnable {
         userListListner.onUserList(userInfos);
     }
 
-    // metoda wywo³ana po starcie w¹tku
+    // metoda wywoï¿½ana po starcie wï¿½tku
     public void run() {
-        // dopóki zmienna watek wskazuje na bie¿¹cy w¹tek
+        // dopï¿½ki zmienna watek wskazuje na bieï¿½ï¿½cy wï¿½tek
         while (!client.disconnected) {
             odbierzWiadomosc();
             aktualizujStatusUzytkownikow();
             try {
-                // wstrzymujemy dzia³anie w¹tku na 1 sekundê
+                // wstrzymujemy dziaï¿½anie wï¿½tku na 1 sekundï¿½
                 Thread.sleep(PAUZA_MS);
             } catch (InterruptedException e) {
                 break;
