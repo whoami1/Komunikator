@@ -1,6 +1,8 @@
 package pl.wrzesien;
 
+import pl.entities.response.Message;
 import pl.entities.response.MessageResponse;
+import pl.entities.response.TextMessage;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -26,26 +28,31 @@ public class CheckIfSthNewOnTheServerThread implements Runnable {
     }
 
     public void odbierzWiadomosc() {
-        List<MessageResponse> messageResponses = client.odebranieWiadomosciZSerwera();
+        List<Message> messageResponses = client.odebranieWiadomosciZSerwera();
 
-        for (MessageResponse messageResponse : messageResponses) {
-            String odbiorca = messageResponse.getUserInfo();
-            CzatWindow czatWindow = null;
-            if (odbiorcaDoCzatWindowMap.get(odbiorca) == null) {
-                czatWindow = new CzatWindow(odbiorca, client, myNickname);
-                odbiorcaDoCzatWindowMap.put(odbiorca, czatWindow);
-                czatWindow.showWindow();
-                czatWindow.addWindowListener(new WindowAdapter() {
-                    @Override
-                    public void windowClosed(WindowEvent e) {
-                        odbiorcaDoCzatWindowMap.remove(odbiorca);
-                    }
-                });
-            } else {
-                czatWindow = odbiorcaDoCzatWindowMap.get(odbiorca);
+        if (messageResponses instanceof TextMessage)
+        {
+            for (Message messageResponse : messageResponses)
+            {
+                String odbiorca = messageResponse.getRecipiant();
+                CzatWindow czatWindow = null;
+                if (odbiorcaDoCzatWindowMap.get(odbiorca) == null) {
+                    czatWindow = new CzatWindow(odbiorca, client, myNickname);
+                    odbiorcaDoCzatWindowMap.put(odbiorca, czatWindow);
+                    czatWindow.showWindow();
+                    czatWindow.addWindowListener(new WindowAdapter() {
+                        @Override
+                        public void windowClosed(WindowEvent e) {
+                            odbiorcaDoCzatWindowMap.remove(odbiorca);
+                        }
+                    });
+                } else {
+                    czatWindow = odbiorcaDoCzatWindowMap.get(odbiorca);
+                }
+                czatWindow.setTxtRozmowaWOknieCzatu(odbiorca, ((TextMessage)messageResponse).getTextMessage());
             }
-            czatWindow.setTxtRozmowaWOknieCzatu(odbiorca, messageResponse.getMessage());
         }
+
     }
 
     public void addUserListListener(UserListListner userListListner) {

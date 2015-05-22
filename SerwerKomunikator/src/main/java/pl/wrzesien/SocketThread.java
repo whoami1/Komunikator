@@ -91,10 +91,10 @@ public class SocketThread implements Runnable {
                     LOGGER.info(allUsersToCommunicationMap.toString());
                     SendMessageRequest sendMessageRequest = (SendMessageRequest) obj;
                     Communication communication = allUsersToCommunicationMap.get(sendMessageRequest.getUsername());
-                    communication.getListOfMessageResponse().add(new MessageResponse(username, sendMessageRequest.getText()));
+                    communication.getListOfMessageResponse().add(new TextMessage(username, sendMessageRequest.getText()));
                 } else if (obj instanceof AllMesageRequest) {
                     Communication communication = allUsersToCommunicationMap.get(username);
-                    List<MessageResponse> listOfMessageResponse = communication.getListOfMessageResponse();
+                    List<Message> listOfMessageResponse = communication.getListOfMessageResponse();
                     oos.writeObject(new AllMessageResponse(listOfMessageResponse));
                     communication.setListOfMessageResponse(new ArrayList<>());
                 } else if (obj instanceof AllUsersListRequest) {

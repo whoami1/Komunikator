@@ -73,7 +73,7 @@ public class Client {
         }
     }
 
-    public List<MessageResponse> odebranieWiadomosciZSerwera() {
+    public List<Message> odebranieWiadomosciZSerwera() {
         try {
             out.writeObject(new AllMesageRequest());
             AllMessageResponse allMessageResponse = (AllMessageResponse) read();

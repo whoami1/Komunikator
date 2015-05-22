@@ -7,14 +7,14 @@ import java.util.List;
  * Created by Micha³ Wrzesieñ on 2015-04-21.
  */
 public class AllMessageResponse implements Serializable {
-    private List<MessageResponse> messageResponseList;
+    private List<Message> messageResponseList;
 
-    public AllMessageResponse(List<MessageResponse> messageResponseList) {
+    public AllMessageResponse(List<Message> messageResponseList) {
 
         this.messageResponseList = messageResponseList;
     }
 
-    public List<MessageResponse> getMessageResponseList() {
+    public List<Message> getMessageResponseList() {
         return messageResponseList;
     }
 
