@@ -102,9 +102,10 @@ public class SocketThread implements Runnable {
                     oos.writeObject(new AllUsersListResponse(userInfos));
                     LOGGER.info(userInfos.toString());
                 } else if (obj instanceof FileRequest) {
-                    //message response
+                    LOGGER.info(allUsersToCommunicationMap.toString());
                     FileRequest fileRequest = (FileRequest) obj;
-                    byte[] plik = fileRequest.getPlik();
+                    Communication communication = allUsersToCommunicationMap.get(fileRequest.getUsername());
+                    communication.getListOfMessageResponse().add(new FileMessage(username, fileRequest.getFile()));
                 }
             }
         } catch (Exception e) {

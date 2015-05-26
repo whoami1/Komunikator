@@ -97,9 +97,9 @@ public class Client {
         return new ArrayList<>();
     }
 
-    public boolean wyslaniePlikuNaSerwer(byte[] plik) {
+    public boolean wyslaniePlikuNaSerwer(String username, byte[] plik) {
         try {
-            out.writeObject(new FileRequest(plik));
+            out.writeObject(new FileRequest(username, plik));
             return true;
         } catch (IOException e) {
             e.printStackTrace();

@@ -1,7 +1,5 @@
 package pl.entities.response;
 
-import pl.wrzesien.UserInfo;
-
 import java.io.Serializable;
 
 /**

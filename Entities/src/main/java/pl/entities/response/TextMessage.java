@@ -1,7 +1,5 @@
 package pl.entities.response;
 
-import java.io.Serializable;
-
 /**
  * Created by Micha³ Wrzesieñ on 2015-05-22.
  */

@@ -1,7 +1,6 @@
 package pl.wrzesien;
 
 import pl.entities.response.Message;
-import pl.entities.response.MessageResponse;
 
 import java.util.List;
 

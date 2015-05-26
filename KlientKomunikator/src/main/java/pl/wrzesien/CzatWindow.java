@@ -1,15 +1,20 @@
 package pl.wrzesien;
 
-import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.text.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FilenameFilter;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -19,6 +24,7 @@ import java.util.Date;
  * Created by Michał Wrzesień on 2015-03-24.
  */
 public class CzatWindow extends JFrame {
+    private static final Logger LOGGER = LoggerFactory.getLogger(pl.wrzesien.CzatWindow.class);
     private JPanel czatWindow;
     private JTextArea txtRozmowaWOknieCzatu;
     private JTextField txtWiadomosc;
@@ -29,6 +35,7 @@ public class CzatWindow extends JFrame {
     private String odbiorca;
     private Client client;
     private String mojNick;
+    private Date dNow;;
 
     public CzatWindow(String odbiorca, Client client, String mojNick) {
         this.client = client;
@@ -40,6 +47,7 @@ public class CzatWindow extends JFrame {
 
         JFileChooser chooser = new JFileChooser();
         LokalizujNapisyPL(chooser);
+        dNow = new Date();
 
         wyslijButton.addActionListener(new ActionListener() {
             @Override
@@ -64,20 +72,15 @@ public class CzatWindow extends JFrame {
                 File plik = chooser.getSelectedFile();
 
                 try {
-                    byte[] bytes = FileUtils.readFileToByteArray(plik);
+                    //byte[] bytes = FileUtils.readFileToByteArray(plik);
 
                     if (returnVal == JFileChooser.APPROVE_OPTION) {
-                        client.wyslaniePlikuNaSerwer(bytes);
+                        splitFile(plik);
                         setTxtRozmowaWOknieCzatu(mojNick, "Wysłano następujący plik: " + plik.getName());
                     }
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
-
-/*               if (returnVal == JFileChooser.APPROVE_OPTION) {
-                    for (File plik : pliki)
-                        System.out.println("Wybrano plik: " + plik.getName());
-                }*/
             }
         });
 
@@ -108,28 +111,41 @@ public class CzatWindow extends JFrame {
 
                 String name = doladujHistorie.getSelectedFile().getName();
 
-                try
-                {
-                    if (returnVal == JFileChooser.APPROVE_OPTION)
-                    {
+                try {
+                    if (returnVal == JFileChooser.APPROVE_OPTION) {
                         ArrayList<String> tekstRozmowyTablica = historiaZapisOdczyt.odczytPliku("archiwum" + "\\" + name);
-                        for (String tekstRozmowy : tekstRozmowyTablica)
-                        {
+                        for (String tekstRozmowy : tekstRozmowyTablica) {
                             txtRozmowaWOknieCzatu.append("*" + tekstRozmowy);
                         }
                     }
-                }
-                catch (IOException e1)
-                {
+                } catch (IOException e1) {
                     e1.printStackTrace();
                 }
             }
         });
+    }
 
+    public void splitFile(File f) throws IOException {
+        int sizeOfFiles = 1024 * 1024;// 1MB
+        byte[] buffer = new byte[sizeOfFiles];
+
+        try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(f)))
+        {//try-with-resources to ensure closing stream
+            String name = f.getName();
+
+            int tmp;
+            while ((tmp = bis.read(buffer)) > 0)
+            {
+                client.wyslaniePlikuNaSerwer(odbiorca, buffer);
+            }
+        }
     }
 
     public void setTxtRozmowaWOknieCzatu(String nadawca, String txtRozmowaWOknieCzatu) {
-        String rozmowa = nadawca + ": " + txtRozmowaWOknieCzatu + "\n";
+        SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yyyy :: kk:mm:ss");
+        String data = ft.format(dNow);
+
+        String rozmowa = "     " + nadawca + " :: " + data + "\n" + txtRozmowaWOknieCzatu + "\n";
         this.txtRozmowaWOknieCzatu.append(rozmowa);
         zapisHistoriiRozmowy(rozmowa);
     }
@@ -137,7 +153,6 @@ public class CzatWindow extends JFrame {
     public void zapisHistoriiRozmowy(String text) {
         HistoriaZapisOdczyt historiaZapisOdczyt = new HistoriaZapisOdczyt();
 
-        Date dNow = new Date();
         SimpleDateFormat ft = new SimpleDateFormat("dd-MM-yyyy");
         String data = ft.format(dNow);
 
