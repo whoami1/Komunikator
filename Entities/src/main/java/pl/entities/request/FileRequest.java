@@ -8,10 +8,12 @@ import java.io.Serializable;
 public class FileRequest implements Serializable {
     private byte[] plik;
     private String username;
+    private String filename;
 
-    public FileRequest(String username, byte[] plik) {
+    public FileRequest(String username, byte[] plik, String filename) {
         this.plik = plik;
         this.username = username;
+        this.filename = filename;
     }
 
 
@@ -29,5 +31,13 @@ public class FileRequest implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 }

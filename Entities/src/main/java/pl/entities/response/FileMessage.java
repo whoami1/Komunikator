@@ -6,10 +6,12 @@ package pl.entities.response;
 public class FileMessage implements Message {
     private byte[] file;
     private String recipient;
+    private String filename;
 
-    public FileMessage(String recipient, byte[] file) {
+    public FileMessage(String recipient, byte[] file, String filename) {
         this.recipient = recipient;
         this.file = file;
+        this.filename = filename;
     }
 
     @Override
@@ -24,4 +26,16 @@ public class FileMessage implements Message {
     public void setFile(byte[] file) {
         this.file = file;
     }
+
+
+    public String getFilename()
+    {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+
+
 }

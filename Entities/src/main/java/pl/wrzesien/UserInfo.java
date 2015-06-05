@@ -16,8 +16,12 @@ public class UserInfo implements Serializable {
         return userNick;
     }
 
-    public boolean getUserStatus() {
-        return userStatus;
+    public String getUserStatus() {
+        if (userStatus == true)
+        {
+            return "dostepny";
+        }
+        return "niedostepny";
     }
 
     public void setUserStatus(boolean userStatus) {

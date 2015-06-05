@@ -17,7 +17,6 @@ public class KontaktyWindow extends JFrame {
     private static final Logger LOGGER = LoggerFactory.getLogger(pl.wrzesien.KontaktyWindow.class);
 
     private JButton historiaButton;
-    private JButton dodajKontaktButton;
     private JTable uzytkownicy;
     private JPanel kontaktyWindow;
     private JButton oAplikacjiButton;
@@ -74,12 +73,6 @@ public class KontaktyWindow extends JFrame {
         oAplikacjiButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 OAplikacjiDialog.openOAplikacjiDialog();
-            }
-        });
-
-        dodajKontaktButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                DodajKontaktDialog.openDodajKontaktyDialog();
             }
         });
 

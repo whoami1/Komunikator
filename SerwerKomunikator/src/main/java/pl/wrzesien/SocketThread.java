@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import pl.entities.request.*;
 import pl.entities.response.*;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -73,7 +74,7 @@ public class SocketThread implements Runnable {
                     }
                 } else if (obj instanceof RegisterRequest) {
                     RegisterRequest registerRequest = (RegisterRequest) obj;
-                    System.out.println(registerRequest.toString());
+                    LOGGER.info(registerRequest.toString());
                     boolean succes = userService.checkIfLoginExists(registerRequest.getLogin());
 
                     if (succes) {
@@ -105,9 +106,11 @@ public class SocketThread implements Runnable {
                     LOGGER.info(allUsersToCommunicationMap.toString());
                     FileRequest fileRequest = (FileRequest) obj;
                     Communication communication = allUsersToCommunicationMap.get(fileRequest.getUsername());
-                    communication.getListOfMessageResponse().add(new FileMessage(username, fileRequest.getFile()));
+                    communication.getListOfMessageResponse().add(new FileMessage(username, fileRequest.getFile(), fileRequest.getFilename()));
                 }
             }
+        } catch (EOFException e) {
+            LOGGER.info(e.toString() + " - this input stream reach the end before reading eight bytes.");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

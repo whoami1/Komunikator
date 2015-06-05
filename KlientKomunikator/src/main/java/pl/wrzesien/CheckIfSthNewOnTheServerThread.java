@@ -17,7 +17,8 @@ import java.util.List;
 /**
  * Created by Micha� Wrzesie� on 2015-05-06.
  */
-public class CheckIfSthNewOnTheServerThread implements Runnable {
+public class CheckIfSthNewOnTheServerThread implements Runnable
+{
     private static final Logger LOGGER = LoggerFactory.getLogger(pl.wrzesien.CheckIfSthNewOnTheServerThread.class);
     // liczba milisekund pauzy (1000 ms czyli 1 sekunda)
     public static final int PAUZA_MS = 1000;
@@ -27,45 +28,24 @@ public class CheckIfSthNewOnTheServerThread implements Runnable {
     private UserListListner userListListner;
 
     // konstruktor klasy
-    public CheckIfSthNewOnTheServerThread(Client client, String myNickname, HashMap<String, CzatWindow> odbiorcaDoCzatWindowMap) {
+    public CheckIfSthNewOnTheServerThread(Client client, String myNickname, HashMap<String, CzatWindow> odbiorcaDoCzatWindowMap)
+    {
         this.client = client;
         this.myNickname = myNickname;
         this.odbiorcaDoCzatWindowMap = odbiorcaDoCzatWindowMap;
     }
 
-    public void odbierzWiadomosc() {
+    public void odbierzWiadomosc()
+    {
         List<Message> messageResponses = client.odebranieWiadomosciZSerwera();
 
         CzatWindow czatWindow = null;
 
         for (Message messageResponse : messageResponses)
         {
-            if (messageResponse instanceof TextMessage) {
-                String odbiorca = messageResponse.getRecipiant();
-
-                if (odbiorcaDoCzatWindowMap.get(odbiorca) == null)
-                {
-                    czatWindow = new CzatWindow(odbiorca, client, myNickname);
-                    odbiorcaDoCzatWindowMap.put(odbiorca, czatWindow);
-                    czatWindow.showWindow();
-                    czatWindow.addWindowListener(new WindowAdapter() {
-                        @Override
-                        public void windowClosed(WindowEvent e) {
-                            odbiorcaDoCzatWindowMap.remove(odbiorca);
-                        }
-                    });
-                } else
-                {
-                    czatWindow = odbiorcaDoCzatWindowMap.get(odbiorca);
-                }
-                czatWindow.setTxtRozmowaWOknieCzatu(odbiorca, ((TextMessage) messageResponse).getTextMessage());
-            }
-            else if (messageResponse instanceof FileMessage)
+            if (messageResponse instanceof TextMessage)
             {
-                //Dodac przesylanie nazwy pliku
-
                 String odbiorca = messageResponse.getRecipiant();
-                byte[] plik = ((FileMessage) messageResponse).getFile();
 
                 if (odbiorcaDoCzatWindowMap.get(odbiorca) == null)
                 {
@@ -80,45 +60,81 @@ public class CheckIfSthNewOnTheServerThread implements Runnable {
                             odbiorcaDoCzatWindowMap.remove(odbiorca);
                         }
                     });
+                } else
+                {
+                    czatWindow = odbiorcaDoCzatWindowMap.get(odbiorca);
                 }
-                else
+                czatWindow.setTxtRozmowaWOknieCzatu(odbiorca, ((TextMessage) messageResponse).getTextMessage());
+            } else if (messageResponse instanceof FileMessage)
+            {
+                String odbiorca = messageResponse.getRecipiant();
+                byte[] plik = ((FileMessage) messageResponse).getFile();
+                String filename = ((FileMessage) messageResponse).getFilename();
+
+                if (odbiorcaDoCzatWindowMap.get(odbiorca) == null)
+                {
+                    czatWindow = new CzatWindow(odbiorca, client, myNickname);
+                    odbiorcaDoCzatWindowMap.put(odbiorca, czatWindow);
+                    czatWindow.showWindow();
+                    czatWindow.addWindowListener(new WindowAdapter()
+                    {
+                        @Override
+                        public void windowClosed(WindowEvent e)
+                        {
+                            odbiorcaDoCzatWindowMap.remove(odbiorca);
+                        }
+                    });
+                } else
                 {
                     czatWindow = odbiorcaDoCzatWindowMap.get(odbiorca);
                 }
 
                 try
                 {
-                    File tmp = File.createTempFile("temp-file-name", ",tmp");
+                    File pathname = new File("odebrane");
+                    if (!pathname.isDirectory())
+                    {
+                        pathname.mkdir();
+                        LOGGER.info("Folder " + pathname + " zostal utworzony");
+                    }
+                    //File tmp = File.createTempFile(filename, ",tmp", pathname);
+                    File tmp = new File("odebrane" + "\\" + filename);
                     FileUtils.writeByteArrayToFile(tmp, plik);
-                    czatWindow.setTxtRozmowaWOknieCzatu(odbiorca,"Odebrano fragmenty pliku: " + tmp);
+                    czatWindow.setTxtRozmowaWOknieCzatu(odbiorca, "Odebrano plik: " + tmp);
 
                     LOGGER.info("Odebrano plik: " + tmp);
-                } catch (IOException e) {
+                } catch (IOException e)
+                {
                     e.printStackTrace();
                 }
             }
         }
     }
 
-    public void addUserListListener(UserListListner userListListner) {
+    public void addUserListListener(UserListListner userListListner)
+    {
         this.userListListner = userListListner;
     }
 
-    public void aktualizujStatusUzytkownikow() {
+    public void aktualizujStatusUzytkownikow()
+    {
         List<UserInfo> userInfos = client.listaWszystkichUzytkownikowRequest();
         userListListner.onUserList(userInfos);
     }
 
-    // metoda wywo�ana po starcie w�tku
-    public void run() {
-        // dop�ki zmienna watek wskazuje na bie��cy w�tek
-        while (!client.disconnected) {
+    // metoda wywolana po starcie watku
+    public void run()
+    {
+        while (!client.disconnected)
+        {
             odbierzWiadomosc();
             aktualizujStatusUzytkownikow();
-            try {
-                // wstrzymujemy dzia�anie w�tku na 1 sekund�
+            try
+            {
+                // wstrzymujemy dzialanie watku na 1 sekunde
                 Thread.sleep(PAUZA_MS);
-            } catch (InterruptedException e) {
+            } catch (InterruptedException e)
+            {
                 break;
             }
         }

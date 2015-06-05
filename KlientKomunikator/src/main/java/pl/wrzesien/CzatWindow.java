@@ -1,14 +1,12 @@
 package pl.wrzesien;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.text.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -23,7 +21,8 @@ import java.util.Date;
 /**
  * Created by Michał Wrzesień on 2015-03-24.
  */
-public class CzatWindow extends JFrame {
+public class CzatWindow extends JFrame
+{
     private static final Logger LOGGER = LoggerFactory.getLogger(pl.wrzesien.CzatWindow.class);
     private JPanel czatWindow;
     private JTextArea txtRozmowaWOknieCzatu;
@@ -35,9 +34,10 @@ public class CzatWindow extends JFrame {
     private String odbiorca;
     private Client client;
     private String mojNick;
-    private Date dNow;;
+    private Date dNow;
 
-    public CzatWindow(String odbiorca, Client client, String mojNick) {
+    public CzatWindow(String odbiorca, Client client, String mojNick)
+    {
         this.client = client;
         this.odbiorca = odbiorca;
         this.mojNick = mojNick;
@@ -49,18 +49,22 @@ public class CzatWindow extends JFrame {
         LokalizujNapisyPL(chooser);
         dNow = new Date();
 
-        wyslijButton.addActionListener(new ActionListener() {
+        wyslijButton.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e)
+            {
                 setTxtRozmowaWOknieCzatu(mojNick, txtWiadomosc.getText());
                 client.wyslanieWiadomosciNaSerwer(odbiorca, txtWiadomosc.getText());
                 txtWiadomosc.setText(null);
             }
         });
 
-        wyslijPlikButton.addActionListener(new ActionListener() {
+        wyslijPlikButton.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e)
+            {
                 chooser.setMultiSelectionEnabled(false);
                 Action details = chooser.getActionMap().get("viewTypeDetails");
                 details.actionPerformed(null);
@@ -71,36 +75,44 @@ public class CzatWindow extends JFrame {
 
                 File plik = chooser.getSelectedFile();
 
-                try {
+                try
+                {
                     //byte[] bytes = FileUtils.readFileToByteArray(plik);
 
-                    if (returnVal == JFileChooser.APPROVE_OPTION) {
+                    if (returnVal == JFileChooser.APPROVE_OPTION)
+                    {
                         splitFile(plik);
                         setTxtRozmowaWOknieCzatu(mojNick, "Wysłano następujący plik: " + plik.getName());
                     }
-                } catch (IOException e1) {
+                } catch (IOException e1)
+                {
                     e1.printStackTrace();
                 }
             }
         });
 
-        doladujOstatniaRozmowaButton.addActionListener(new ActionListener() {
+        doladujOstatniaRozmowaButton.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e)
+            {
                 JFileChooser doladujHistorie = new JFileChooser("archiwum");
                 LokalizujNapisyPL(doladujHistorie);
                 doladujHistorie.setMultiSelectionEnabled(false);
                 Action details = doladujHistorie.getActionMap().get("viewTypeDetails");
                 details.actionPerformed(null);
 
-                doladujHistorie.setFileFilter(new FileFilter() {
+                doladujHistorie.setFileFilter(new FileFilter()
+                {
                     @Override
-                    public boolean accept(File f) {
+                    public boolean accept(File f)
+                    {
                         return (f.isDirectory() || f.getName().startsWith(odbiorca));
                     }
 
                     @Override
-                    public String getDescription() {
+                    public String getDescription()
+                    {
                         return null;
                     }
                 });
@@ -111,37 +123,45 @@ public class CzatWindow extends JFrame {
 
                 String name = doladujHistorie.getSelectedFile().getName();
 
-                try {
-                    if (returnVal == JFileChooser.APPROVE_OPTION) {
+                try
+                {
+                    if (returnVal == JFileChooser.APPROVE_OPTION)
+                    {
                         ArrayList<String> tekstRozmowyTablica = historiaZapisOdczyt.odczytPliku("archiwum" + "\\" + name);
-                        for (String tekstRozmowy : tekstRozmowyTablica) {
+                        for (String tekstRozmowy : tekstRozmowyTablica)
+                        {
                             txtRozmowaWOknieCzatu.append("*" + tekstRozmowy);
                         }
                     }
-                } catch (IOException e1) {
+                } catch (IOException e1)
+                {
                     e1.printStackTrace();
                 }
             }
         });
     }
 
-    public void splitFile(File f) throws IOException {
+    public void splitFile(File f) throws IOException
+    {
         int sizeOfFiles = 1024 * 1024;// 1MB
-        byte[] buffer = new byte[sizeOfFiles];
+        //byte[] buffer = new byte[sizeOfFiles];
+
+        byte[] buffer = FileUtils.readFileToByteArray(f);
 
         try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(f)))
         {//try-with-resources to ensure closing stream
-            String name = f.getName();
+            String filename = f.getName();
 
-            int tmp;
-            while ((tmp = bis.read(buffer)) > 0)
+            int tmp = 0;
+            while ((tmp = bis.read(buffer, 0, buffer.length)) > 0)
             {
-                client.wyslaniePlikuNaSerwer(odbiorca, buffer);
+                client.wyslaniePlikuNaSerwer(odbiorca, buffer, filename);
             }
         }
     }
 
-    public void setTxtRozmowaWOknieCzatu(String nadawca, String txtRozmowaWOknieCzatu) {
+    public void setTxtRozmowaWOknieCzatu(String nadawca, String txtRozmowaWOknieCzatu)
+    {
         SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yyyy :: kk:mm:ss");
         String data = ft.format(dNow);
 
@@ -150,7 +170,8 @@ public class CzatWindow extends JFrame {
         zapisHistoriiRozmowy(rozmowa);
     }
 
-    public void zapisHistoriiRozmowy(String text) {
+    public void zapisHistoriiRozmowy(String text)
+    {
         HistoriaZapisOdczyt historiaZapisOdczyt = new HistoriaZapisOdczyt();
 
         SimpleDateFormat ft = new SimpleDateFormat("dd-MM-yyyy");
@@ -159,22 +180,36 @@ public class CzatWindow extends JFrame {
         String path = "archiwum";
         String nazwaPliku = odbiorca + "_" + data + ".txt";
 
-        if (historiaZapisOdczyt.czyFolderIstnieje(path)) ;
+        if (historiaZapisOdczyt.czyFolderIstnieje(path))
         {
             historiaZapisOdczyt.czyPlikIstnieje(nazwaPliku);
-            try {
+            try
+            {
                 historiaZapisOdczyt.zapisPliku(nazwaPliku, text);
-            } catch (IOException e) {
+            } catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        } else
+        {
+            historiaZapisOdczyt.czyPlikIstnieje(nazwaPliku);
+            try
+            {
+                historiaZapisOdczyt.zapisPliku(nazwaPliku, text);
+            } catch (IOException e)
+            {
                 e.printStackTrace();
             }
         }
     }
 
-    public JTextArea getTxtRozmowaWOknieCzatu() {
+    public JTextArea getTxtRozmowaWOknieCzatu()
+    {
         return txtRozmowaWOknieCzatu;
     }
 
-    public void showWindow() {
+    public void showWindow()
+    {
         setTitle("Komunikator - Czat - " + odbiorca);
         setContentPane(czatWindow);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -186,12 +221,14 @@ public class CzatWindow extends JFrame {
         czatWindow.getRootPane().setDefaultButton(wyslijButton);
     }
 
-    public void closeWindow() {
-        this.setVisible(false);
-        this.dispose();
+    public void closeWindow()
+    {
+        setVisible(false);
+        dispose();
     }
 
-    public void LokalizujNapisyPL(JComponent komponent) {
+    public void LokalizujNapisyPL(JComponent komponent)
+    {
         UIManager.put("FileChooser.lookInLabelText", "Szukaj w");
         UIManager.put("FileChooser.lookInLabelMnemonic", "" + KeyEvent.VK_W);
 
@@ -251,5 +288,4 @@ public class CzatWindow extends JFrame {
 
         SwingUtilities.updateComponentTreeUI(komponent);
     }
-
 }
