@@ -3,11 +3,12 @@ package pl.entities.response;
 /**
  * Created by Micha³ Wrzesieñ on 2015-05-22.
  */
-public class TextMessage implements Message {
+public class TextMessageResponse implements MessageResponse
+{
     private String textMessage;
     private String recipient;
 
-    public TextMessage(String recipient, String textMessage) {
+    public TextMessageResponse(String recipient, String textMessage) {
         this.recipient = recipient;
         this.textMessage = textMessage;
     }

@@ -103,7 +103,7 @@ public class Client
         }
     }
 
-    public List<Message> odebranieWiadomosciZSerwera()
+    public List<MessageResponse> odebranieWiadomosciZSerwera()
     {
         try
         {

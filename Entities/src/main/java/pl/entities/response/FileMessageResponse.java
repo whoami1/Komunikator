@@ -3,12 +3,13 @@ package pl.entities.response;
 /**
  * Created by Micha³ Wrzesieñ on 2015-05-22.
  */
-public class FileMessage implements Message {
+public class FileMessageResponse implements MessageResponse
+{
     private byte[] file;
     private String recipient;
     private String filename;
 
-    public FileMessage(String recipient, byte[] file, String filename) {
+    public FileMessageResponse(String recipient, byte[] file, String filename) {
         this.recipient = recipient;
         this.file = file;
         this.filename = filename;

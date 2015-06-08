@@ -1,6 +1,6 @@
 package pl.wrzesien;
 
-import pl.entities.response.Message;
+import pl.entities.response.MessageResponse;
 
 import java.util.List;
 
@@ -8,11 +8,11 @@ import java.util.List;
  * Created by Micha³ Wrzesieñ on 2015-04-21.
  */
 public class Communication {
-    private List<Message> listOfMessageResponse;
+    private List<MessageResponse> listOfMessageResponse;
 
     private UserInfo userInfo;
 
-    public Communication(List<Message> listOfMessageResponse, UserInfo userInfo) {
+    public Communication(List<MessageResponse> listOfMessageResponse, UserInfo userInfo) {
         this.listOfMessageResponse = listOfMessageResponse;
         this.userInfo = userInfo;
     }
@@ -21,11 +21,11 @@ public class Communication {
         return userInfo;
     }
 
-    public List<Message> getListOfMessageResponse() {
+    public List<MessageResponse> getListOfMessageResponse() {
         return listOfMessageResponse;
     }
 
-    public void setListOfMessageResponse(List<Message> listOfMessageResponse) {
+    public void setListOfMessageResponse(List<MessageResponse> listOfMessageResponse) {
         this.listOfMessageResponse = listOfMessageResponse;
     }
 }

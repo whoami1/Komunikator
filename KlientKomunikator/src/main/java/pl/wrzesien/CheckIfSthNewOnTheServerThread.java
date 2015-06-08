@@ -3,9 +3,9 @@ package pl.wrzesien;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pl.entities.response.FileMessage;
-import pl.entities.response.Message;
-import pl.entities.response.TextMessage;
+import pl.entities.response.FileMessageResponse;
+import pl.entities.response.MessageResponse;
+import pl.entities.response.TextMessageResponse;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -37,13 +37,13 @@ public class CheckIfSthNewOnTheServerThread implements Runnable
 
     public void odbierzWiadomosc()
     {
-        List<Message> messageResponses = client.odebranieWiadomosciZSerwera();
+        List<MessageResponse> messageResponses = client.odebranieWiadomosciZSerwera();
 
         CzatWindow czatWindow = null;
 
-        for (Message messageResponse : messageResponses)
+        for (MessageResponse messageResponse : messageResponses)
         {
-            if (messageResponse instanceof TextMessage)
+            if (messageResponse instanceof TextMessageResponse)
             {
                 String odbiorca = messageResponse.getRecipiant();
 
@@ -64,12 +64,12 @@ public class CheckIfSthNewOnTheServerThread implements Runnable
                 {
                     czatWindow = odbiorcaDoCzatWindowMap.get(odbiorca);
                 }
-                czatWindow.setTxtRozmowaWOknieCzatu(odbiorca, ((TextMessage) messageResponse).getTextMessage());
-            } else if (messageResponse instanceof FileMessage)
+                czatWindow.setTxtRozmowaWOknieCzatu(odbiorca, ((TextMessageResponse) messageResponse).getTextMessage());
+            } else if (messageResponse instanceof FileMessageResponse)
             {
                 String odbiorca = messageResponse.getRecipiant();
-                byte[] plik = ((FileMessage) messageResponse).getFile();
-                String filename = ((FileMessage) messageResponse).getFilename();
+                byte[] plik = ((FileMessageResponse) messageResponse).getFile();
+                String filename = ((FileMessageResponse) messageResponse).getFilename();
 
                 if (odbiorcaDoCzatWindowMap.get(odbiorca) == null)
                 {
