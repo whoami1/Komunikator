@@ -9,8 +9,12 @@ import pl.entities.response.TextMessageResponse;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -40,6 +44,8 @@ public class CheckIfSthNewOnTheServerThread implements Runnable
         List<MessageResponse> messageResponses = client.odebranieWiadomosciZSerwera();
 
         CzatWindow czatWindow = null;
+        boolean odebranoPlik = false;
+        String odebranoPlik_nazwa = "";
 
         for (MessageResponse messageResponse : messageResponses)
         {
@@ -67,9 +73,11 @@ public class CheckIfSthNewOnTheServerThread implements Runnable
                 czatWindow.setTxtRozmowaWOknieCzatu(odbiorca, ((TextMessageResponse) messageResponse).getTextMessage());
             } else if (messageResponse instanceof FileMessageResponse)
             {
+                odebranoPlik = true;
                 String odbiorca = messageResponse.getRecipiant();
                 byte[] plik = ((FileMessageResponse) messageResponse).getFile();
                 String filename = ((FileMessageResponse) messageResponse).getFilename();
+                odebranoPlik_nazwa = filename;
 
                 if (odbiorcaDoCzatWindowMap.get(odbiorca) == null)
                 {
@@ -97,7 +105,7 @@ public class CheckIfSthNewOnTheServerThread implements Runnable
                         pathname.mkdir();
                         LOGGER.info("Folder " + pathname + " zostal utworzony");
                     }
-                    //File tmp = File.createTempFile(filename, ",tmp", pathname);
+                    //File tmp = File.createTempFile(filename + "-", ",tmp", pathname);
                     File tmp = new File("odebrane" + "\\" + filename);
                     FileUtils.writeByteArrayToFile(tmp, plik);
                     czatWindow.setTxtRozmowaWOknieCzatu(odbiorca, "Odebrano plik: " + tmp);
@@ -108,6 +116,43 @@ public class CheckIfSthNewOnTheServerThread implements Runnable
                     e.printStackTrace();
                 }
             }
+        }
+        if(odebranoPlik)
+        {
+            String[] filesplit = odebranoPlik_nazwa.split("\\.");
+            String filename = "";
+            String strfileparts = filesplit[filesplit.length-1];
+            int fileparts = Integer.parseInt(strfileparts);
+            for(int i=0;i<filesplit.length-1;i++)
+            {
+                if (i == filesplit.length - 2)
+                    filename += filesplit[i];
+                else
+                    filename += filesplit[i] + ".";
+            }
+            File into = new File("odebrane\\" + filename);
+            List<File> files = new ArrayList<>();
+            for(int i=0;i<fileparts+1;i++)
+                files.add(new File("odebrane\\" + filename + "." + String.format("%03d", i)));
+            try
+            {
+                try (BufferedOutputStream mergingStream = new BufferedOutputStream(new FileOutputStream(into)))
+                {
+                    for (File f : files) {
+                        try
+                        {
+                            Files.copy(f.toPath(), mergingStream);
+                        } catch (IOException e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            } catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            //remove parts
         }
     }
 

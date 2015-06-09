@@ -1,6 +1,5 @@
 package pl.wrzesien;
 
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,7 +46,6 @@ public class CzatWindow extends JFrame
 
         JFileChooser chooser = new JFileChooser();
         LokalizujNapisyPL(chooser);
-        dNow = new Date();
 
         wyslijButton.addActionListener(new ActionListener()
         {
@@ -145,24 +143,40 @@ public class CzatWindow extends JFrame
     {
         int sizeOfFiles = 1024 * 1024;// 1MB
         //byte[] buffer = new byte[sizeOfFiles];
+        int last_part_size = (int)(f.length() % sizeOfFiles);
+        long length = f.length();
+        double a = (double)((double)length / (double)sizeOfFiles);
+        int parts = (int)Math.ceil(a);
 
-        byte[] buffer = FileUtils.readFileToByteArray(f);
+        //byte[] buffer = FileUtils.readFileToByteArray(f);
 
         try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(f)))
         {//try-with-resources to ensure closing stream
             String filename = f.getName();
 
-            int tmp = 0;
-            while ((tmp = bis.read(buffer, 0, buffer.length)) > 0)
+            for(int i=0; i<parts; i++)
             {
-                client.wyslaniePlikuNaSerwer(odbiorca, buffer, filename);
+                int current_part_size = sizeOfFiles;
+                if(i == parts-1)
+                    current_part_size = last_part_size;
+                byte[] buffer = new byte[current_part_size];
+                bis.read(buffer, 0, current_part_size);
+                client.wyslaniePlikuNaSerwer(odbiorca, buffer, filename + "." + String.format("%03d", i));
             }
+            /*while ((tmp = bis.read(buffer, 0, sizeOfFiles)) > 0)
+            {
+                if(partCounter == parts)
+                    tmp = last_part_size;
+                client.wyslaniePlikuNaSerwer(odbiorca, buffer, filename + "." + String.format("%03d", partCounter++), tmp);
+                partCounter++;
+            }*/
         }
     }
 
     public void setTxtRozmowaWOknieCzatu(String nadawca, String txtRozmowaWOknieCzatu)
     {
         SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yyyy :: kk:mm:ss");
+        dNow = new Date();
         String data = ft.format(dNow);
 
         String rozmowa = "     " + nadawca + " :: " + data + "\n" + txtRozmowaWOknieCzatu + "\n";
@@ -175,6 +189,7 @@ public class CzatWindow extends JFrame
         HistoriaZapisOdczyt historiaZapisOdczyt = new HistoriaZapisOdczyt();
 
         SimpleDateFormat ft = new SimpleDateFormat("dd-MM-yyyy");
+        dNow = new Date();
         String data = ft.format(dNow);
 
         String path = "archiwum";

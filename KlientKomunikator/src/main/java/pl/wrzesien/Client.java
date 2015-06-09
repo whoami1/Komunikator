@@ -149,8 +149,9 @@ public class Client
     {
         try
         {
-            out.writeObject(new FileRequest(username, plik, filename));
-            out.flush();
+            FileRequest obj = new FileRequest(username, plik, filename);
+            out.writeObject(obj);
+            out.reset();
             return true;
         } catch (IOException e)
         {
