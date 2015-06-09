@@ -107,7 +107,7 @@ public class Client
     {
         try
         {
-            out.writeObject(new AllMesageRequest());
+            out.writeObject(new AllMessageRequest());
             AllMessageResponse allMessageResponse = (AllMessageResponse) read();
             LOGGER.info(allMessageResponse.toString());
             return allMessageResponse.getMessageResponseList();
