@@ -108,19 +108,23 @@ public class KontaktyWindow extends JFrame {
         uzytkownicy.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    String kontaktZListyUzytkownikow = (String) uzytkownicy.getValueAt(uzytkownicy.getSelectedRow(), 0);
-                    LOGGER.info("Wybrany kontakt z listy użytkowników: " + kontaktZListyUzytkownikow);
-                    czatWindow = new CzatWindow(kontaktZListyUzytkownikow, client, mojNick);
-                    czatWindow.showWindow();
-                    odbiorcaDoCzatWindowMap.put(kontaktZListyUzytkownikow, czatWindow);
+                try {
+                    if (e.getClickCount() == 2) {
+                        String kontaktZListyUzytkownikow = (String) uzytkownicy.getValueAt(uzytkownicy.getSelectedRow(), 0);
+                        LOGGER.info("Wybrany kontakt z listy użytkowników: " + kontaktZListyUzytkownikow);
+                        czatWindow = new CzatWindow(kontaktZListyUzytkownikow, client, mojNick);
+                        czatWindow.showWindow();
+                        odbiorcaDoCzatWindowMap.put(kontaktZListyUzytkownikow, czatWindow);
 
-                    czatWindow.addWindowListener(new WindowAdapter() {
-                        @Override
-                        public void windowClosed(WindowEvent e) {
-                            odbiorcaDoCzatWindowMap.remove(kontaktZListyUzytkownikow);
-                        }
-                    });
+                        czatWindow.addWindowListener(new WindowAdapter() {
+                            @Override
+                            public void windowClosed(WindowEvent e) {
+                                odbiorcaDoCzatWindowMap.remove(kontaktZListyUzytkownikow);
+                            }
+                        });
+                    }
+                } catch (ArrayIndexOutOfBoundsException ee) {
+                    LOGGER.info(e.toString());
                 }
             }
         });
