@@ -64,8 +64,8 @@ public class CzatWindow extends JFrame
             public void actionPerformed(ActionEvent e)
             {
                 chooser.setMultiSelectionEnabled(false);
-                Action details = chooser.getActionMap().get("viewTypeDetails");
-                details.actionPerformed(null);
+//                Action details = chooser.getActionMap().get("viewTypeDetails");
+//                details.actionPerformed(null);
 
                 FileNameExtensionFilter filtr = new FileNameExtensionFilter("Obrazy JPEG & GIF & PNG", "jpg", "gif", "png");
                 chooser.setFileFilter(filtr);

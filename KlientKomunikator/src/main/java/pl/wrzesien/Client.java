@@ -54,7 +54,7 @@ public class Client
         return null;
     }
 
-    public boolean login(String userLogin, String userPassword)
+    public synchronized boolean login(String userLogin, String userPassword)
     {
         try
         {
@@ -73,7 +73,7 @@ public class Client
         return false;
     }
 
-    public boolean register(String userLogin, String userPassword)
+    public synchronized boolean register(String userLogin, String userPassword)
     {
         try
         {
@@ -92,7 +92,7 @@ public class Client
         return true; //w wypadku zerwania połączenia zawsze rejestracja nie powiedzie się
     }
 
-    public void wyslanieWiadomosciNaSerwer(String userLogin, String text)
+    public synchronized void wyslanieWiadomosciNaSerwer(String userLogin, String text)
     {
         try
         {
@@ -103,7 +103,7 @@ public class Client
         }
     }
 
-    public List<MessageResponse> odebranieWiadomosciZSerwera()
+    public synchronized List<MessageResponse> odebranieWiadomosciZSerwera()
     {
         try
         {
@@ -124,7 +124,7 @@ public class Client
         return new ArrayList<>();
     }
 
-    public List<UserInfo> listaWszystkichUzytkownikowRequest()
+    public synchronized List<UserInfo> listaWszystkichUzytkownikowRequest()
     {
         try
         {
@@ -145,13 +145,13 @@ public class Client
         return new ArrayList<>();
     }
 
-    public boolean wyslaniePlikuNaSerwer(String username, byte[] plik, String filename)
+    public synchronized boolean wyslaniePlikuNaSerwer(String username, byte[] plik, String filename)
     {
         try
         {
             FileRequest obj = new FileRequest(username, plik, filename);
             out.writeObject(obj);
-            out.reset();
+            out.flush();
             return true;
         } catch (IOException e)
         {
