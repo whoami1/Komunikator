@@ -8,18 +8,22 @@ import java.util.List;
 /**
  * Created by Michał Wrzesień on 2015-03-28.
  */
-public class UserService {
+public class UserService
+{
     private Session session;
 
-    public UserService() {
+    public UserService()
+    {
         this.session = HibernateUtil.getSessionFactory().openSession();
     }
 
-    public void close() {
+    public void close()
+    {
         HibernateUtil.getSessionFactory().close();
     } //prawdopodobnie można zmienić na HibernateUtil.shutdown();
 
-    public void newUser(String userNick, String userPassword) {
+    public void newUser(String userNick, String userPassword)
+    {
         session.beginTransaction();
 
         User user = new User(userNick, userPassword);
@@ -28,7 +32,8 @@ public class UserService {
         session.getTransaction().commit();
     }
 
-    private User getUser(Integer userId) {
+    private User getUser(Integer userId)
+    {
         session.beginTransaction();
 
         User result = (User) session.get(User.class, userId);
@@ -37,7 +42,8 @@ public class UserService {
         return result;
     }
 
-    private void deleteUser(Integer userId) {
+    private void deleteUser(Integer userId)
+    {
         session.beginTransaction();
 
         //jeśli będą jakieś relacje, na początek je usunąć
@@ -47,7 +53,8 @@ public class UserService {
         session.getTransaction().commit();
     }
 
-    public List<String> showAllUsers() {
+    public List<String> showAllUsers()
+    {
         session.beginTransaction();
 
         List<String> result = session.createQuery("SELECT userNick FROM User").list();
@@ -57,7 +64,8 @@ public class UserService {
     }
 
     //checkCredentials dziala przy logowaniu
-    public Boolean checkCredentials(String login, String password) {
+    public Boolean checkCredentials(String login, String password)
+    {
         session.beginTransaction();
 
         List<Query> result = session.createQuery("FROM User WHERE userNick='" + login + "' AND userPassword='" + password + "'").list();
@@ -69,7 +77,8 @@ public class UserService {
     }
 
     //chceckIfLoginExists dziala przy rejestracji
-    public Boolean checkIfLoginExists(String login) {
+    public Boolean checkIfLoginExists(String login)
+    {
         session.beginTransaction();
 
         List<Query> result = session.createQuery("FROM User WHERE userNick='" + login + "'").list();

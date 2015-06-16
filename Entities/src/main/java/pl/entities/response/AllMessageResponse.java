@@ -6,20 +6,24 @@ import java.util.List;
 /**
  * Created by Micha³ Wrzesieñ on 2015-04-21.
  */
-public class AllMessageResponse implements Serializable {
+public class AllMessageResponse implements Serializable
+{
     private List<MessageResponse> messageResponseList;
 
-    public AllMessageResponse(List<MessageResponse> messageResponseList) {
+    public AllMessageResponse(List<MessageResponse> messageResponseList)
+    {
 
         this.messageResponseList = messageResponseList;
     }
 
-    public List<MessageResponse> getMessageResponseList() {
+    public List<MessageResponse> getMessageResponseList()
+    {
         return messageResponseList;
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "AllMessageResponse{" +
                 "messageResponseList=" + messageResponseList +
                 '}';

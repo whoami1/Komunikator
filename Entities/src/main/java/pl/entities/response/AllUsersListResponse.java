@@ -6,19 +6,23 @@ import java.io.Serializable;
 import java.util.List;
 
 
-public class AllUsersListResponse implements Serializable {
+public class AllUsersListResponse implements Serializable
+{
     private List<UserInfo> allUsersList;
 
-    public AllUsersListResponse(List<UserInfo> allUsersList) {
+    public AllUsersListResponse(List<UserInfo> allUsersList)
+    {
         this.allUsersList = allUsersList;
     }
 
-    public List<UserInfo> getAllUsersList() {
+    public List<UserInfo> getAllUsersList()
+    {
         return allUsersList;
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "AllUsersListResponse{" +
                 "allUsersList=" + allUsersList +
                 '}';

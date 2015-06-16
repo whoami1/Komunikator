@@ -30,7 +30,8 @@ public class LoginRequestHandler
         {
             userName.setValue(loginRequest.getLogin());
             Communication communication = allUsersToCommunicationMap.get(userName.getValue());
-            Communication communicationNew = new Communication(communication.getListOfMessageResponse(), new UserInfo(communication.getUserInfo().getUserNick(), true));
+            Communication communicationNew = new Communication(communication.getListOfMessageResponse(),
+                    new UserInfo(communication.getUserInfo().getUserNick(), true));
             allUsersToCommunicationMap.put(userName.getValue(), communicationNew);
 
             oos.writeObject(new LoginResponse(success));
@@ -39,7 +40,8 @@ public class LoginRequestHandler
         } else
         {
             oos.writeObject(new LoginResponse(success));
-            LOGGER.info("Port: " + socket.getPort() + "|" + "Nieprawidlowy login lub haslo - rozlaczam z " + socket.getRemoteSocketAddress());
+            LOGGER.info("Port: " + socket.getPort() + "|" + "Nieprawidlowy login lub haslo - rozlaczam z " +
+                    socket.getRemoteSocketAddress());
         }
     }
 }

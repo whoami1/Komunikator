@@ -31,7 +31,8 @@ public class RegisterRequestHandler
         if (succes)
         {
             oos.writeObject(new RegistrationResponse(succes));
-            LOGGER.info("|" + "Port: " + socket.getPort() + "|" + "Uzytkownik o podanym loginie: " + registerRequest.getLogin() + " juz istnieje - rozlaczam z " + socket.getRemoteSocketAddress());
+            LOGGER.info("|" + "Port: " + socket.getPort() + "|" + "Uzytkownik o podanym loginie: " +
+                    registerRequest.getLogin() + " juz istnieje - rozlaczam z " + socket.getRemoteSocketAddress());
         } else
         {
             UserInfo userInfo = new UserInfo(registerRequest.getLogin(), false);
@@ -39,7 +40,8 @@ public class RegisterRequestHandler
             allUsersToCommunicationMap.put(registerRequest.getLogin(), communication);
             oos.writeObject(new RegistrationResponse(succes));
             userService.newUser(registerRequest.getLogin(), registerRequest.getPassword());
-            LOGGER.info("|" + "Port: " + socket.getPort() + "|" + "Zarejestrowano uzytkownika o loginie: " + registerRequest.getLogin() + " - rozlaczam z " + socket.getRemoteSocketAddress());
+            LOGGER.info("|" + "Port: " + socket.getPort() + "|" + "Zarejestrowano uzytkownika o loginie: " +
+                    registerRequest.getLogin() + " - rozlaczam z " + socket.getRemoteSocketAddress());
         }
     }
 }

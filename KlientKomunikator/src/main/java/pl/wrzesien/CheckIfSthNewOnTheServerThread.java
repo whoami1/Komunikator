@@ -117,13 +117,13 @@ public class CheckIfSthNewOnTheServerThread implements Runnable
                 }
             }
         }
-        if(odebranoPlik)
+        if (odebranoPlik)
         {
             String[] filesplit = odebranoPlik_nazwa.split("\\.");
             String filename = "";
-            String strfileparts = filesplit[filesplit.length-1];
+            String strfileparts = filesplit[filesplit.length - 1];
             int fileparts = Integer.parseInt(strfileparts);
-            for(int i=0;i<filesplit.length-1;i++)
+            for (int i = 0; i < filesplit.length - 1; i++)
             {
                 if (i == filesplit.length - 2)
                     filename += filesplit[i];
@@ -132,13 +132,14 @@ public class CheckIfSthNewOnTheServerThread implements Runnable
             }
             File into = new File("odebrane\\" + filename);
             List<File> files = new ArrayList<>();
-            for(int i=0;i<fileparts+1;i++)
+            for (int i = 0; i < fileparts + 1; i++)
                 files.add(new File("odebrane\\" + filename + "." + String.format("%03d", i)));
             try
             {
                 try (BufferedOutputStream mergingStream = new BufferedOutputStream(new FileOutputStream(into)))
                 {
-                    for (File f : files) {
+                    for (File f : files)
+                    {
                         try
                         {
                             Files.copy(f.toPath(), mergingStream);

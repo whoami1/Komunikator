@@ -12,7 +12,8 @@ import java.awt.event.WindowEvent;
 /**
  * Created by Michał Wrzesień on 2015-03-08.
  */
-public class MainWindow extends JFrame {
+public class MainWindow extends JFrame
+{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MainWindow.class);
 
@@ -24,44 +25,56 @@ public class MainWindow extends JFrame {
 
     private Client client = null;
 
-    public MainWindow() {
+    public MainWindow()
+    {
         logowanieButton.setEnabled(false);
         rejestracjaButton.setEnabled(false);
 
-        polaczZSerweremButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        polaczZSerweremButton.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
                 client = new Client();
-                if (client.connect(getServerIpAddress())) {
+                if (client.connect(getServerIpAddress()))
+                {
                     JOptionPane.showMessageDialog(mainWindow, "Połączenie z serwerem zostało ustanowione...", "Informacja o połączeniu", JOptionPane.INFORMATION_MESSAGE);
                     LOGGER.info("Połączenie z serwerem zostało ustanowione...");
                     polaczZSerweremButton.setEnabled(false);
                     logowanieButton.setEnabled(true);
                     rejestracjaButton.setEnabled(true);
-                } else {
+                } else
+                {
                     JOptionPane.showMessageDialog(mainWindow, "Połączenie nie mogło zostać zrealizowane... Spróbuj ponownie...", "Błąd połączenia", JOptionPane.ERROR_MESSAGE);
                     LOGGER.info("Połączenie nie mogło zostać zrealizowane... Spróbuj ponownie...");
                 }
             }
         });
 
-        logowanieButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        logowanieButton.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
                 openLogowanieWindow(client);
                 closeMainWindow();
             }
         });
 
-        rejestracjaButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        rejestracjaButton.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
                 openRejestracjaWindow(client);
                 closeMainWindow();
             }
         });
 
-        addWindowListener(new WindowAdapter() {
+        addWindowListener(new WindowAdapter()
+        {
             @Override
-            public void windowClosing(WindowEvent e) {
-                if (client != null) {
+            public void windowClosing(WindowEvent e)
+            {
+                if (client != null)
+                {
                     client.closeConnection();
                     LOGGER.info("Połączenie z serwerem zostało zakończone...");
                 }
@@ -70,27 +83,32 @@ public class MainWindow extends JFrame {
         });
     }
 
-    public String getServerIpAddress() {
+    public String getServerIpAddress()
+    {
         String ipAddress = cmbAdresSerwera.getSelectedItem().toString();
         LOGGER.info("Obecny adres IP: " + ipAddress);
         return ipAddress;
     }
 
-    public void setCmbAdresSerwera(JComboBox cmbAdresSerwera) {
+    public void setCmbAdresSerwera(JComboBox cmbAdresSerwera)
+    {
         this.cmbAdresSerwera = cmbAdresSerwera;
     }
 
-    public void openLogowanieWindow(Client client) {
+    public void openLogowanieWindow(Client client)
+    {
         LogowanieWindow logowanieWindow = new LogowanieWindow(this, client);
         logowanieWindow.showLogowanieWindow();
     }
 
-    public void openRejestracjaWindow(Client client) {
+    public void openRejestracjaWindow(Client client)
+    {
         RejestracjaWindow rejestracjaWindow = new RejestracjaWindow(this, client);
         rejestracjaWindow.showRejestracjaWindow();
     }
 
-    public void showWindow() {
+    public void showWindow()
+    {
         setTitle("Komunikator");
         setContentPane(mainWindow);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -101,12 +119,14 @@ public class MainWindow extends JFrame {
         mainWindow.getRootPane().setDefaultButton(polaczZSerweremButton);
     }
 
-    public void closeMainWindow() {
+    public void closeMainWindow()
+    {
         this.setVisible(false);
         this.dispose();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         pl.wrzesien.MainWindow mainWindow = new MainWindow();
         mainWindow.showWindow();
     }

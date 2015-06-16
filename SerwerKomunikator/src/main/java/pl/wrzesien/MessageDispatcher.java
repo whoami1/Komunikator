@@ -25,13 +25,14 @@ public class MessageDispatcher
         this.userName = userName;
     }
 
-    public void dispatch (Object obj) throws Exception
+    public void dispatch(Object obj) throws Exception
     {
-            String nazwa = "pl.wrzesien.handler." + obj.getClass().getSimpleName() + "Handler";
-            Class cl = Class.forName(nazwa);
+        String nazwa = "pl.wrzesien.handler." + obj.getClass().getSimpleName() + "Handler";
+        Class cl = Class.forName(nazwa);
 
-            Object o = cl.newInstance();
-            Method method = cl.getMethod("execute",Object.class, UserService.class, ObjectOutputStream.class, Socket.class, Map.class, UserName.class);
-            method.invoke(o, obj, userService, oos, socket, map, userName);
+        Object o = cl.newInstance();
+        Method method = cl.getMethod("execute", Object.class, UserService.class, ObjectOutputStream.class,
+                Socket.class, Map.class, UserName.class);
+        method.invoke(o, obj, userService, oos, socket, map, userName);
     }
 }

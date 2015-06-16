@@ -13,7 +13,8 @@ import java.util.ArrayList;
 /**
  * Created by Michał Wrzesień on 2015-03-10.
  */
-public class LogowanieWindow extends JFrame {
+public class LogowanieWindow extends JFrame
+{
     private static final Logger LOGGER = LoggerFactory.getLogger(pl.wrzesien.LogowanieWindow.class);
     private JPasswordField txtHaslo;
     private JTextField txtLogin;
@@ -24,29 +25,37 @@ public class LogowanieWindow extends JFrame {
     private MainWindow mainWindow;
     private Client client;
 
-    public LogowanieWindow(MainWindow mainWindow, Client client) {
+    public LogowanieWindow(MainWindow mainWindow, Client client)
+    {
         this.mainWindow = mainWindow;
         this.client = client;
 
-        anulujButton.addActionListener(new ActionListener() {
+        anulujButton.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e)
+            {
                 closeLogowanieWindow();
                 mainWindow.showWindow();
             }
         });
 
-        zalogujButton.addActionListener(new ActionListener() {
+        zalogujButton.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e)
+            {
                 checkIfAllCredentialsEntered();
             }
         });
 
-        addWindowListener(new WindowAdapter() {
+        addWindowListener(new WindowAdapter()
+        {
             @Override
-            public void windowClosing(WindowEvent e) {
-                if (client != null) {
+            public void windowClosing(WindowEvent e)
+            {
+                if (client != null)
+                {
                     client.closeConnection();
                     LOGGER.info("Połączenie z serwerem zostało zakończone...");
                 }
@@ -54,36 +63,46 @@ public class LogowanieWindow extends JFrame {
         });
     }
 
-    private void checkIfAllCredentialsEntered() {
-        if (getLogin().isEmpty()) {
+    private void checkIfAllCredentialsEntered()
+    {
+        if (getLogin().isEmpty())
+        {
             JOptionPane.showMessageDialog(logowanieWindow, "Nie wpisano jeszcze loginu...", "Informacja", JOptionPane.INFORMATION_MESSAGE);
-        } else if (getHaslo().isEmpty()) {
+        } else if (getHaslo().isEmpty())
+        {
             JOptionPane.showMessageDialog(logowanieWindow, "Nie wpisano jeszcze hasła...", "Informacja", JOptionPane.INFORMATION_MESSAGE);
-        } else {
+        } else
+        {
             logIn();
         }
     }
 
-    private void logIn() {
-        if (client.login(getLogin(), getHaslo())) {
+    private void logIn()
+    {
+        if (client.login(getLogin(), getHaslo()))
+        {
             KontaktyWindow kontaktyWindow = new KontaktyWindow(client, getLogin(), new ArrayList<>());
             kontaktyWindow.showKontaktyWindow();
             closeLogowanieWindow();
-        } else {
+        } else
+        {
             JOptionPane.showMessageDialog(logowanieWindow, "Nieprawidłowy login albo hasło...", "Błąd uwierzytelniania", JOptionPane.ERROR_MESSAGE);
         }
     }
 
 
-    public String getLogin() {
+    public String getLogin()
+    {
         return String.valueOf(txtLogin.getText());
     }
 
-    public String getHaslo() {
+    public String getHaslo()
+    {
         return String.valueOf(txtHaslo.getPassword());
     }
 
-    public void showLogowanieWindow() {
+    public void showLogowanieWindow()
+    {
         setTitle("Komunikator - Logowanie");
         setContentPane(logowanieWindow);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -93,7 +112,8 @@ public class LogowanieWindow extends JFrame {
         getRootPane().setDefaultButton(zalogujButton);
     }
 
-    public void closeLogowanieWindow() {
+    public void closeLogowanieWindow()
+    {
         this.setVisible(false);
         this.dispose();
     }

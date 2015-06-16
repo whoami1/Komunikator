@@ -224,8 +224,7 @@ public class Client
         } catch (SocketException ee)
         {
             LOGGER.info(client + " " + ee.toString());
-        }
-        catch (IOException e)
+        } catch (IOException e)
         {
             e.printStackTrace();
         }

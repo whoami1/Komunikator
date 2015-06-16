@@ -11,7 +11,8 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ServerMain extends Thread {
+public class ServerMain extends Thread
+{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ServerMain.class);
     public static final int SOCKET_PORT = 6066;
@@ -21,11 +22,13 @@ public class ServerMain extends Thread {
 
     private Map<String, Communication> allUsersToCommunicationMap = new ConcurrentHashMap<>();
 
-    public ServerMain(int port) throws IOException {
+    public ServerMain(int port) throws IOException
+    {
         serverSocket = new ServerSocket(port);
         serverSocket.setSoTimeout(1000000);
 
-        for (String user : userService.showAllUsers()) {
+        for (String user : userService.showAllUsers())
+        {
             LOGGER.info("Zarejestrowani: " + userService.showAllUsers().toString());
             UserInfo userInfo = new UserInfo(user, false);
             allUsersToCommunicationMap.put(user, new Communication(new ArrayList<>(), userInfo));
@@ -33,33 +36,41 @@ public class ServerMain extends Thread {
 
     }
 
-    public String log(String text) {
+    public String log(String text)
+    {
         return "|" + "Port lokalny: " + serverSocket.getLocalPort() + "|" + text;
     }
 
-    public void run() {
-        while (true) {
+    public void run()
+    {
+        while (true)
+        {
             LOGGER.info(log("Oczekiwanie na klienta na porcie " + serverSocket.getLocalPort() + "..."));
-            try {
+            try
+            {
                 Socket server = serverSocket.accept();//nowy watek + przeslanie do niego tego socketa + kontynuacja petli
                 LOGGER.info(log("Polaczenie z klientem na porcie: " + serverSocket.getLocalPort() + " zostalo zrealizowane..."));
                 new Thread(new SocketThread(allUsersToCommunicationMap, server, userService)).start();
-            } catch (SocketTimeoutException s) {
+            } catch (SocketTimeoutException s)
+            {
                 LOGGER.info(log("Limit czasu socketu zostal przekroczony!"));
                 break;
-            } catch (IOException e) {
+            } catch (IOException e)
+            {
                 e.printStackTrace();
                 break;
             }
         }
     }
 
-    public static void main(String[] args) {
-        //int port = 6066;
-        try {
+    public static void main(String[] args)
+    {
+        try
+        {
             Thread t = new ServerMain(SOCKET_PORT);
             t.start();
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             e.printStackTrace();
         }
     }

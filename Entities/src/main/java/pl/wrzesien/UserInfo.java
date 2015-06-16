@@ -2,21 +2,25 @@ package pl.wrzesien;
 
 import java.io.Serializable;
 
-public class UserInfo implements Serializable {
+public class UserInfo implements Serializable
+{
     private String userNick;
     private boolean userStatus;
 
-    public UserInfo(String userNick, boolean userStatus) {
+    public UserInfo(String userNick, boolean userStatus)
+    {
         this.userNick = userNick;
         this.userStatus = userStatus;
     }
 
-    public String getUserNick() {
+    public String getUserNick()
+    {
 
         return userNick;
     }
 
-    public String getUserStatus() {
+    public String getUserStatus()
+    {
         if (userStatus == true)
         {
             return "dostepny";
@@ -24,12 +28,14 @@ public class UserInfo implements Serializable {
         return "niedostepny";
     }
 
-    public void setUserStatus(boolean userStatus) {
+    public void setUserStatus(boolean userStatus)
+    {
         this.userStatus = userStatus;
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "UserInfo{" +
                 "userNick='" + userNick + '\'' +
                 ", userStatus=" + userStatus +
@@ -37,7 +43,8 @@ public class UserInfo implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(Object o)
+    {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -49,7 +56,8 @@ public class UserInfo implements Serializable {
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         int result = userNick != null ? userNick.hashCode() : 0;
         result = 31 * result + (userStatus ? 1 : 0);
         return result;

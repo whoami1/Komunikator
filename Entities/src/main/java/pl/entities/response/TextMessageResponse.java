@@ -8,17 +8,20 @@ public class TextMessageResponse implements MessageResponse
     private String textMessage;
     private String recipient;
 
-    public TextMessageResponse(String recipient, String textMessage) {
+    public TextMessageResponse(String recipient, String textMessage)
+    {
         this.recipient = recipient;
         this.textMessage = textMessage;
     }
 
     @Override
-    public String getRecipiant() {
+    public String getRecipiant()
+    {
         return recipient;
     }
 
-    public String getTextMessage() {
+    public String getTextMessage()
+    {
         return textMessage;
     }
 }

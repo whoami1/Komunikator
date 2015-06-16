@@ -64,8 +64,6 @@ public class CzatWindow extends JFrame
             public void actionPerformed(ActionEvent e)
             {
                 chooser.setMultiSelectionEnabled(false);
-//                Action details = chooser.getActionMap().get("viewTypeDetails");
-//                details.actionPerformed(null);
 
                 FileNameExtensionFilter filtr = new FileNameExtensionFilter("Obrazy JPEG & GIF & PNG", "jpg", "gif", "png");
                 chooser.setFileFilter(filtr);
@@ -75,8 +73,6 @@ public class CzatWindow extends JFrame
 
                 try
                 {
-                    //byte[] bytes = FileUtils.readFileToByteArray(plik);
-
                     if (returnVal == JFileChooser.APPROVE_OPTION)
                     {
                         splitFile(plik);
@@ -142,34 +138,24 @@ public class CzatWindow extends JFrame
     public void splitFile(File f) throws IOException
     {
         int sizeOfFiles = 1024 * 1024;// 1MB
-        //byte[] buffer = new byte[sizeOfFiles];
-        int last_part_size = (int)(f.length() % sizeOfFiles);
+        int last_part_size = (int) (f.length() % sizeOfFiles);
         long length = f.length();
-        double a = (double)((double)length / (double)sizeOfFiles);
-        int parts = (int)Math.ceil(a);
-
-        //byte[] buffer = FileUtils.readFileToByteArray(f);
+        double a = (double) ((double) length / (double) sizeOfFiles);
+        int parts = (int) Math.ceil(a);
 
         try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(f)))
         {//try-with-resources to ensure closing stream
             String filename = f.getName();
 
-            for(int i=0; i<parts; i++)
+            for (int i = 0; i < parts; i++)
             {
                 int current_part_size = sizeOfFiles;
-                if(i == parts-1)
+                if (i == parts - 1)
                     current_part_size = last_part_size;
                 byte[] buffer = new byte[current_part_size];
                 bis.read(buffer, 0, current_part_size);
                 client.wyslaniePlikuNaSerwer(odbiorca, buffer, filename + "." + String.format("%03d", i));
             }
-            /*while ((tmp = bis.read(buffer, 0, sizeOfFiles)) > 0)
-            {
-                if(partCounter == parts)
-                    tmp = last_part_size;
-                client.wyslaniePlikuNaSerwer(odbiorca, buffer, filename + "." + String.format("%03d", partCounter++), tmp);
-                partCounter++;
-            }*/
         }
     }
 

@@ -12,7 +12,8 @@ import java.util.List;
 /**
  * Created by Michał Wrzesień on 2015-03-22.
  */
-public class KontaktyWindow extends JFrame {
+public class KontaktyWindow extends JFrame
+{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(pl.wrzesien.KontaktyWindow.class);
 
@@ -31,7 +32,8 @@ public class KontaktyWindow extends JFrame {
     private List<UserInfo> allUsers;
     private HashMap<String, CzatWindow> odbiorcaDoCzatWindowMap;
 
-    public KontaktyWindow(Client client, String mojNick, List<UserInfo> allUsers) {
+    public KontaktyWindow(Client client, String mojNick, List<UserInfo> allUsers)
+    {
         this.mojNick = mojNick;
         this.client = client;
         this.allUsers = allUsers;
@@ -40,9 +42,11 @@ public class KontaktyWindow extends JFrame {
         lblUruchomionyUzytkownik.setText("Konto użytkownika: " + mojNick);
 
         CheckIfSthNewOnTheServerThread checkThread = new CheckIfSthNewOnTheServerThread(client, mojNick, odbiorcaDoCzatWindowMap);
-        UserListListner userListListner = new UserListListner() {
+        UserListListner userListListner = new UserListListner()
+        {
             @Override
-            public void onUserList(List<UserInfo> userList) {
+            public void onUserList(List<UserInfo> userList)
+            {
                 uzytkownicy.setModel(new UserListTableModel(userList));
             }
         };
@@ -51,18 +55,23 @@ public class KontaktyWindow extends JFrame {
 
         new Thread(checkThread).start();
 
-        wylogujButton.addActionListener(new ActionListener() {
+        wylogujButton.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                if (client != null) {
+            public void actionPerformed(ActionEvent e)
+            {
+                if (client != null)
+                {
                     client.closeConnection();
                     LOGGER.info("Połączenie z serwerem zostało zakończone, użytkownik: " + "*" + mojNick + "*" + " wylogował się...");
                 }
                 closeWindow();
-                if (czatWindow != null) {
+                if (czatWindow != null)
+                {
                     czatWindow.closeWindow();
                 }
-                if (historiaWindow != null) {
+                if (historiaWindow != null)
+                {
                     historiaWindow.closeWindow();
                 }
                 MainWindow mainWindow = new MainWindow();
@@ -70,24 +79,31 @@ public class KontaktyWindow extends JFrame {
             }
         });
 
-        oAplikacjiButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        oAplikacjiButton.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
                 OAplikacjiDialog.openOAplikacjiDialog();
             }
         });
 
-        historiaButton.addActionListener(new ActionListener() {
+        historiaButton.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e)
+            {
                 historiaWindow = new HistoriaWindow();
                 historiaWindow.showWindow();
             }
         });
 
-        addWindowListener(new WindowAdapter() {
+        addWindowListener(new WindowAdapter()
+        {
             @Override
-            public void windowClosing(WindowEvent e) {
-                if (client != null) {
+            public void windowClosing(WindowEvent e)
+            {
+                if (client != null)
+                {
                     client.closeConnection();
                     LOGGER.info("Połączenie z serwerem zostało zakończone...");
                 }
@@ -95,9 +111,12 @@ public class KontaktyWindow extends JFrame {
         });
     }
 
-    private void createUIComponents() {
-        uzytkownicy = new JTable(new UserListTableModel(new ArrayList<>())) {
-            public boolean isCellEditable(int data, int columnNames) {
+    private void createUIComponents()
+    {
+        uzytkownicy = new JTable(new UserListTableModel(new ArrayList<>()))
+        {
+            public boolean isCellEditable(int data, int columnNames)
+            {
                 return false;
             } //zablokowanie edycji komorek tabeli
         };
@@ -105,32 +124,40 @@ public class KontaktyWindow extends JFrame {
         uzytkownicy.setRowSelectionAllowed(true);
         uzytkownicy.setFillsViewportHeight(true);
         uzytkownicy.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        uzytkownicy.addMouseListener(new MouseAdapter() {
+        uzytkownicy.addMouseListener(new MouseAdapter()
+        {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                try {
-                    if (e.getClickCount() == 2) {
+            public void mouseClicked(MouseEvent e)
+            {
+                try
+                {
+                    if (e.getClickCount() == 2)
+                    {
                         String kontaktZListyUzytkownikow = (String) uzytkownicy.getValueAt(uzytkownicy.getSelectedRow(), 0);
                         LOGGER.info("Wybrany kontakt z listy użytkowników: " + kontaktZListyUzytkownikow);
                         czatWindow = new CzatWindow(kontaktZListyUzytkownikow, client, mojNick);
                         czatWindow.showWindow();
                         odbiorcaDoCzatWindowMap.put(kontaktZListyUzytkownikow, czatWindow);
 
-                        czatWindow.addWindowListener(new WindowAdapter() {
+                        czatWindow.addWindowListener(new WindowAdapter()
+                        {
                             @Override
-                            public void windowClosed(WindowEvent e) {
+                            public void windowClosed(WindowEvent e)
+                            {
                                 odbiorcaDoCzatWindowMap.remove(kontaktZListyUzytkownikow);
                             }
                         });
                     }
-                } catch (ArrayIndexOutOfBoundsException ee) {
+                } catch (ArrayIndexOutOfBoundsException ee)
+                {
                     LOGGER.info(e.toString());
                 }
             }
         });
     }
 
-    public void showKontaktyWindow() {
+    public void showKontaktyWindow()
+    {
         setTitle("Komunikator - Kontakty");
         setContentPane(kontaktyWindow);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -139,7 +166,8 @@ public class KontaktyWindow extends JFrame {
         setVisible(true);
     }
 
-    public void closeWindow() {
+    public void closeWindow()
+    {
         this.setVisible(false);
         this.dispose();
     }

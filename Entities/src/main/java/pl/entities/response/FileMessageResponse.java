@@ -9,34 +9,36 @@ public class FileMessageResponse implements MessageResponse
     private String recipient;
     private String filename;
 
-    public FileMessageResponse(String recipient, byte[] file, String filename) {
+    public FileMessageResponse(String recipient, byte[] file, String filename)
+    {
         this.recipient = recipient;
         this.file = file;
         this.filename = filename;
     }
 
     @Override
-    public String getRecipiant() {
+    public String getRecipiant()
+    {
         return recipient;
     }
 
-    public byte[] getFile() {
+    public byte[] getFile()
+    {
         return file;
     }
 
-    public void setFile(byte[] file) {
+    public void setFile(byte[] file)
+    {
         this.file = file;
     }
-
 
     public String getFilename()
     {
         return filename;
     }
 
-    public void setFilename(String filename) {
+    public void setFilename(String filename)
+    {
         this.filename = filename;
     }
-
-
 }

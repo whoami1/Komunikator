@@ -9,7 +9,8 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "user")
-public class User implements Serializable {
+public class User implements Serializable
+{
     private static final long serialVersionUID = 1;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,48 +19,60 @@ public class User implements Serializable {
     private String userNick;
     private String userPassword;
 
-    public User() {
+    public User()
+    {
+
     }
 
-    public User(Integer userId) {
+    public User(Integer userId)
+    {
         this.userId = userId;
     }
 
-    public User(String userNick) {
+    public User(String userNick)
+    {
         this.userNick = userNick;
     }
 
-    public User(String userNick, String userPassword) {
+    public User(String userNick, String userPassword)
+    {
         this.userNick = userNick;
         this.userPassword = userPassword;
     }
 
-    public Integer getUserId() {
+    public Integer getUserId()
+    {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Integer userId)
+    {
         this.userId = userId;
     }
 
-    public String getUserNick() {
+    public String getUserNick()
+    {
         return userNick;
     }
 
-    public void setUserNick(String userNick) {
+    public void setUserNick(String userNick)
+    {
         this.userNick = userNick;
     }
 
-    public String getUserPassword() {
+    public String getUserPassword()
+    {
         return userPassword;
     }
 
-    public void setUserPassword(String userPassword) {
+    public void setUserPassword(String userPassword)
+    {
         this.userPassword = userPassword;
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "User{" +
                 "userId=" + userId +
                 ", userNick='" + userNick + '\'' +
@@ -68,7 +81,8 @@ public class User implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(Object o)
+    {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -82,7 +96,8 @@ public class User implements Serializable {
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         int result = userId != null ? userId.hashCode() : 0;
         result = 31 * result + (userNick != null ? userNick.hashCode() : 0);
         result = 31 * result + (userPassword != null ? userPassword.hashCode() : 0);
